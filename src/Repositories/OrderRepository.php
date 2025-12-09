@@ -2,6 +2,7 @@
 
 namespace Molitor\Order\Repositories;
 
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Str;
 use Molitor\Address\Repositories\AddressRepositoryInterface;
 use Molitor\Currency\Models\Currency;
@@ -60,5 +61,10 @@ class OrderRepository implements OrderRepositoryInterface
         } while ($exists);
 
         return $code;
+    }
+
+    public function getByCustomer(Customer $customer): Collection
+    {
+        return $this->order->where('customer_id', $customer->id)->orderBy('created_at')->get();
     }
 }

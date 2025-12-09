@@ -2,6 +2,7 @@
 
 namespace Molitor\Order\Repositories;
 
+use Illuminate\Database\Eloquent\Collection;
 use Molitor\Order\Models\Order;
 use Molitor\Customer\Models\Customer;
 use Molitor\Currency\Models\Currency;
@@ -18,4 +19,6 @@ interface OrderRepositoryInterface
     public function codeExists(string $code): bool;
 
     public function generateCode(): string;
+
+    public function getByCustomer(Customer $customer): Collection;
 }

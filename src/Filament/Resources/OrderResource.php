@@ -17,6 +17,7 @@ use Filament\Schemas\Components\Tabs;
 use Filament\Schemas\Schema;
 use Filament\Tables\Table;
 use Filament\Tables\Columns\TextColumn;
+use Filament\Actions\ViewAction;
 use Filament\Tables\Filters\SelectFilter;
 use Illuminate\Support\Facades\Gate;
 use Molitor\Address\Filament\Components\Address;
@@ -141,6 +142,7 @@ class OrderResource extends Resource
                     ->searchable(),
             ])
             ->actions([
+                ViewAction::make(),
                 EditAction::make(),
                 DeleteAction::make(),
             ])
@@ -156,6 +158,7 @@ class OrderResource extends Resource
         return [
             'index' => Pages\ListOrders::route('/'),
             'create' => Pages\CreateOrder::route('/create'),
+            'view' => Pages\ViewOrder::route('/{record}'),
             'edit' => Pages\EditOrder::route('/{record}/edit'),
         ];
     }

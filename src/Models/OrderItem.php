@@ -3,6 +3,7 @@
 namespace Molitor\Order\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Molitor\Currency\Models\Currency;
 use Molitor\Product\Models\Product;
 use Molitor\Product\Models\ProductUnit;
@@ -14,26 +15,25 @@ class OrderItem extends Model
         'product_id',
         'quantity',
         'price',
-        'currency_id',
         'comment',
     ];
 
-    public function order()
+    public function order(): BelongsTo
     {
         return $this->belongsTo(Order::class, 'order_id');
     }
 
-    public function product()
+    public function product(): BelongsTo
     {
         return $this->belongsTo(Product::class, 'product_id');
     }
 
-    public function currency()
+    public function currency(): BelongsTo
     {
         return $this->belongsTo(Currency::class, 'currency_id');
     }
 
-    public function productUnit()
+    public function productUnit(): BelongsTo
     {
         return $this->belongsTo(ProductUnit::class, 'product_unit_id');
     }

@@ -2,7 +2,6 @@
 
 namespace Molitor\Order\Repositories;
 
-use Illuminate\Database\Eloquent\Collection;
 use Molitor\Order\Models\OrderStatus;
 
 class OrderStatusRepository implements OrderStatusRepositoryInterface
@@ -14,28 +13,28 @@ class OrderStatusRepository implements OrderStatusRepositoryInterface
         $this->orderStatus = new OrderStatus();
     }
 
-    public function getByName(string $name): ?OrderStatus
+    public function getByName(string $name, int|string|null $language = null): ?OrderStatus
     {
-        return $this->orderStatus->where('name', $name)->first();
+        return $this->orderStatus->joinTranslation($language)->whereTranslation('name', $name)->first();
     }
 
     public function getOptions(): array
     {
-        return $this->orderStatus->get()->pluck('name', 'id')->toArray();
+        return $this->orderStatus
+            ->get()
+            ->mapWithKeys(function (OrderStatus $status) {
+                $label = $status->name ?? null;
+                if ($label === null || $label === '') {
+                    $label = $status->code ?: ('#' . (string) $status->id);
+                }
+                return [$status->id => (string) $label];
+            })
+            ->toArray();
     }
 
-    public function delete(OrderStatus $orderStatus)
+    public function delete(OrderStatus $orderStatus): void
     {
         $orderStatus->delete();
-    }
-
-    public function fundOrCreate($name): OrderStatus
-    {
-        $orderStatus = $this->getByName($name);
-        if ($orderStatus) {
-            return $orderStatus;
-        }
-        return $this->orderStatus->create(['name' => $name]);
     }
 
     public function getAll()
@@ -43,8 +42,35 @@ class OrderStatusRepository implements OrderStatusRepositoryInterface
         return $this->orderStatus->orderBy('name')->get();
     }
 
-    public function getDefault(): ?OrderStatus
+    public function getDefault(): OrderStatus
     {
-        return $this->fundOrCreate('db');
+        return $this->fundOrCreate('ordered', 'Megrendelve');
+    }
+
+    public function getByCode(string $code): OrderStatus|null
+    {
+        return $this->orderStatus->where('code', $code)->first();
+    }
+
+    /**
+     * Ensure name fallback when creating/finding by code & name.
+     */
+    public function fundOrCreate(string $code, string $name, int|string|null $language = null): OrderStatus
+    {
+        $orderStatus = $this->getByCode($code);
+        if ($orderStatus) {
+            return $orderStatus;
+        }
+
+        $name = ($name === null || $name === '') ? $code : $name;
+
+        $orderStatus = $this->getByName($name, $language);
+        if ($orderStatus) {
+            return $orderStatus;
+        }
+
+        return $this->orderStatus->create([
+            'code' => $code,
+        ]);
     }
 }

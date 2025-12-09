@@ -19,12 +19,6 @@ class CreateOrderItemsTable extends Migration
             $table->unsignedBigInteger('order_id');
             $table->foreign('order_id')->references('id')->on('orders');
 
-            $table->string('sku');
-            $table->string('name');
-
-
-
-
             $table->unsignedBigInteger('product_id');
             $table->foreign('product_id')->references('id')->on('products');
 

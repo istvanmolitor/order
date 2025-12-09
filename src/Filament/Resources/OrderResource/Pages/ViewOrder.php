@@ -10,6 +10,8 @@ use Filament\Resources\Pages\ViewRecord;
 use Filament\Schemas\Components\Fieldset;
 use Filament\Schemas\Schema;
 use Molitor\Order\Filament\Resources\OrderResource;
+use Molitor\Customer\Filament\Resources\CustomerResource;
+use Molitor\Product\Filament\Resources\ProductResource;
 
 class ViewOrder extends ViewRecord
 {
@@ -35,7 +37,9 @@ class ViewOrder extends ViewRecord
                         TextEntry::make('code')
                             ->label(__('order::common.code')),
                         TextEntry::make('customer.name')
-                            ->label(__('order::common.customer')),
+                            ->label(__('order::common.customer'))
+                            ->url(fn ($record) => $record->customer ? CustomerResource::getUrl('edit', ['record' => $record->customer]) : null)
+                            ->openUrlInNewTab(),
                         TextEntry::make('orderStatus.name')
                             ->label(__('order::common.order_status'))
                             ->badge(),
@@ -72,6 +76,8 @@ class ViewOrder extends ViewRecord
                                 TextEntry::make('product')
                                     ->label(__('order::common.product'))
                                     ->state(fn ($record) => (string) $record->product)
+                                    ->url(fn ($record) => $record->product ? ProductResource::getUrl('edit', ['record' => $record->product]) : null)
+                                    ->openUrlInNewTab()
                                     ->columnSpan(2),
                                 TextEntry::make('quantity')
                                     ->label(__('order::common.quantity'))

@@ -30,7 +30,7 @@ class CreateOrdersTable extends Migration
             $table->unsignedBigInteger('invoice_address_id');
             $table->foreign('invoice_address_id')->references('id')->on('addresses');
 
-            $table->unsignedBigInteger('shipping_address_id')->nullable();
+            $table->unsignedBigInteger('shipping_address_id');
             $table->foreign('shipping_address_id')->references('id')->on('addresses');
 
             $table->string('phone', 64)->nullable();
@@ -39,6 +39,12 @@ class CreateOrdersTable extends Migration
 
             $table->text('comment')->nullable();
             $table->text('internal_comment')->nullable();
+
+            $table->unsignedBigInteger('order_payment_id');
+            $table->foreign('order_payment_id')->references('id')->on('order_payments');
+
+            $table->unsignedBigInteger('order_shipping_id');
+            $table->foreign('order_shipping_id')->references('id')->on('order_shippings');
 
             $table->timestamps();
         });

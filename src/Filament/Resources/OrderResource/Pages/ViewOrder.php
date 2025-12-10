@@ -40,9 +40,45 @@ class ViewOrder extends ViewRecord
                             ->label(__('order::common.customer'))
                             ->url(fn ($record) => $record->customer ? CustomerResource::getUrl('edit', ['record' => $record->customer]) : null)
                             ->openUrlInNewTab(),
-                        TextEntry::make('orderStatus.name')
+                        TextEntry::make('orderStatus')
                             ->label(__('order::common.order_status'))
-                            ->badge(),
+                            ->state(function ($record) {
+                                $status = $record->orderStatus;
+                                if (!$status) return null;
+                                $color = $status->color;
+                                $name = e($status->name ?? '');
+                                $dot = $color
+                                    ? "<span style=\"display:inline-block;width:0.75rem;height:0.75rem;border-radius:9999px;background-color: {$color};margin-right:0.375rem;vertical-align:middle;border:1px solid rgba(0,0,0,0.1)\"></span>"
+                                    : '';
+                                return $dot . $name;
+                            })
+                            ->html(),
+                        TextEntry::make('orderPayment')
+                            ->label(__('order::common.order_payment'))
+                            ->state(function ($record) {
+                                $payment = $record->orderPayment;
+                                if (!$payment) return null;
+                                $color = $payment->color;
+                                $name = e($payment->name ?? '');
+                                $dot = $color
+                                    ? "<span style=\"display:inline-block;width:0.75rem;height:0.75rem;border-radius:9999px;background-color: {$color};margin-right:0.375rem;vertical-align:middle;border:1px solid rgba(0,0,0,0.1)\"></span>"
+                                    : '';
+                                return $dot . $name;
+                            })
+                            ->html(),
+                        TextEntry::make('orderShipping')
+                            ->label(__('order::common.order_shipping'))
+                            ->state(function ($record) {
+                                $shipping = $record->orderShipping;
+                                if (!$shipping) return null;
+                                $color = $shipping->color;
+                                $name = e($shipping->name ?? '');
+                                $dot = $color
+                                    ? "<span style=\"display:inline-block;width:0.75rem;height:0.75rem;border-radius:9999px;background-color: {$color};margin-right:0.375rem;vertical-align:middle;border:1px solid rgba(0,0,0,0.1)\"></span>"
+                                    : '';
+                                return $dot . $name;
+                            })
+                            ->html(),
                     ])
                     ->columns(2),
 

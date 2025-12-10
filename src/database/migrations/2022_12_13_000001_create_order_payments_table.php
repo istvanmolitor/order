@@ -11,6 +11,7 @@ return new class extends Migration
         Schema::create('order_payments', function (Blueprint $table) {
             $table->id();
             $table->string('code');
+            $table->string('color', 9)->nullable();
             $table->timestamps();
         });
     }

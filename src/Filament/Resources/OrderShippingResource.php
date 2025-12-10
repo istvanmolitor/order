@@ -4,6 +4,7 @@ namespace Molitor\Order\Filament\Resources;
 
 use Filament\Resources\Resource;
 use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Columns\ColorColumn;
 use Filament\Forms;
 use Filament\Tables\Table;
 use Filament\Actions\DeleteAction;
@@ -44,6 +45,9 @@ class OrderShippingResource extends Resource
                 ->label(__('order::order_shipping.form.code'))
                 ->maxLength(50)
                 ->unique(ignoreRecord: true),
+            Forms\Components\ColorPicker::make('color')
+                ->label('Szín')
+                ->nullable(),
             TranslatableFields::schema([
                 Forms\Components\TextInput::make('name')
                     ->label(__('order::order_shipping.form.name'))
@@ -62,6 +66,7 @@ class OrderShippingResource extends Resource
             ->columns([
                 TextColumn::make('code')->label(__('order::order_shipping.table.code'))->searchable()->sortable(),
                 TextColumn::make('translation.name')->label(__('order::order_shipping.table.name'))->searchable()->sortable(),
+                ColorColumn::make('color')->label('Szín')->sortable(),
             ])
             ->actions([
                 EditAction::make(),

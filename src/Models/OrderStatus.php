@@ -13,6 +13,7 @@ class OrderStatus extends TranslatableModel
 
     protected $fillable = [
         'code',
+        'color',
     ];
 
     public function __toString(): string

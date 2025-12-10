@@ -19,6 +19,9 @@ class Order extends Model
         'shipping_address_id',
         'comment',
         'internal_comment',
+        'phone',
+        'referer',
+        'invoice',
     ];
 
     protected static function booted(): void

@@ -33,6 +33,10 @@ class CreateOrdersTable extends Migration
             $table->unsignedBigInteger('shipping_address_id')->nullable();
             $table->foreign('shipping_address_id')->references('id')->on('addresses');
 
+            $table->string('phone', 64)->nullable();
+            $table->string('referer', 255)->nullable();
+            $table->string('invoice', 255)->nullable();
+
             $table->text('comment')->nullable();
             $table->text('internal_comment')->nullable();
 

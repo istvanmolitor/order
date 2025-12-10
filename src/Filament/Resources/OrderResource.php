@@ -88,6 +88,15 @@ class OrderResource extends Resource
                             ->options($orderStatusRepository->getOptions())
                             ->required()
                             ->searchable(),
+                        TextInput::make('phone')
+                            ->label(__('order::common.phone'))
+                            ->maxLength(64),
+                        TextInput::make('referer')
+                            ->label(__('order::common.referer'))
+                            ->maxLength(255),
+                        TextInput::make('invoice')
+                            ->label(__('order::common.invoice'))
+                            ->maxLength(255),
                     ]),
                     Textarea::make('comment')->label(__('order::common.comment'))->columnSpanFull(),
                     Textarea::make('internal_comment')->label(__('order::common.internal_comment'))->columnSpanFull(),

@@ -32,6 +32,11 @@ class OrderPaymentRepository implements OrderPaymentRepositoryInterface
             ->toArray();
     }
 
+    public function getAllIds(): array
+    {
+        return $this->orderPayment->pluck('id')->all();
+    }
+
     public function delete(OrderPayment $orderPayment): void
     {
         $orderPayment->delete();

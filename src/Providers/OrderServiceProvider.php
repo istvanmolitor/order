@@ -13,6 +13,8 @@ use Molitor\Order\Repositories\OrderPaymentRepositoryInterface;
 use Molitor\Order\Repositories\OrderPaymentRepository;
 use Molitor\Order\Repositories\OrderShippingRepositoryInterface;
 use Molitor\Order\Repositories\OrderShippingRepository;
+use Molitor\Order\Repositories\OrderShippingPaymentRepositoryInterface;
+use Molitor\Order\Repositories\OrderShippingPaymentRepository;
 
 class OrderServiceProvider extends ServiceProvider
 {
@@ -29,5 +31,6 @@ class OrderServiceProvider extends ServiceProvider
         $this->app->bind(OrderItemRepositoryInterface::class, OrderItemRepository::class);
         $this->app->bind(OrderPaymentRepositoryInterface::class, OrderPaymentRepository::class);
         $this->app->bind(OrderShippingRepositoryInterface::class, OrderShippingRepository::class);
+        $this->app->bind(OrderShippingPaymentRepositoryInterface::class, OrderShippingPaymentRepository::class);
     }
 }

@@ -7,6 +7,7 @@ return [
         'code' => 'Kód',
         'name' => 'Név',
         'description' => 'Leírás',
+        'payments' => 'Engedélyezett fizetési módok',
     ],
     'table' => [
         'code' => 'Kód',

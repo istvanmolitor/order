@@ -32,6 +32,11 @@ class OrderShippingRepository implements OrderShippingRepositoryInterface
             ->toArray();
     }
 
+    public function getAllIds(): array
+    {
+        return $this->orderShipping->pluck('id')->all();
+    }
+
     public function delete(OrderShipping $orderShipping): void
     {
         $orderShipping->delete();

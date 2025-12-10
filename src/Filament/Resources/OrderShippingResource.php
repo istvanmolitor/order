@@ -2,6 +2,9 @@
 
 namespace Molitor\Order\Filament\Resources;
 
+use Filament\Forms\Components\ColorPicker;
+use Filament\Forms\Components\Select;
+use Filament\Forms\Components\TextInput;
 use Filament\Resources\Resource;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Columns\ColorColumn;
@@ -16,6 +19,8 @@ use Illuminate\Support\Facades\Gate;
 use Molitor\Language\Filament\Components\TranslatableFields;
 use Molitor\Order\Filament\Resources\OrderShippingResource\Pages;
 use Molitor\Order\Models\OrderShipping;
+use Molitor\Order\Repositories\OrderPaymentRepositoryInterface;
+use Illuminate\Database\Eloquent\Model;
 
 class OrderShippingResource extends Resource
 {
@@ -40,16 +45,18 @@ class OrderShippingResource extends Resource
 
     public static function form(Schema $schema): Schema
     {
+        /** @var OrderPaymentRepositoryInterface $orderPaymentRepository */
+        $orderPaymentRepository = app(OrderPaymentRepositoryInterface::class);
         return $schema->components([
-            Forms\Components\TextInput::make('code')
+            TextInput::make('code')
                 ->label(__('order::order_shipping.form.code'))
                 ->maxLength(50)
                 ->unique(ignoreRecord: true),
-            Forms\Components\ColorPicker::make('color')
+            ColorPicker::make('color')
                 ->label('Szín')
                 ->nullable(),
             TranslatableFields::schema([
-                Forms\Components\TextInput::make('name')
+                TextInput::make('name')
                     ->label(__('order::order_shipping.form.name'))
                     ->required()
                     ->maxLength(255),
@@ -57,6 +64,14 @@ class OrderShippingResource extends Resource
                     ->label(__('order::order_shipping.form.description'))
                     ->columnSpan(2),
             ])->columns(2),
+            Select::make('payments')
+                ->label(__('order::order_shipping.form.payments'))
+                ->options($orderPaymentRepository->getOptions())
+                ->multiple()
+                ->searchable()
+                ->preload()
+                ->dehydrated(false)
+                ->columnSpanFull(),
         ])->columns(1);
     }
 

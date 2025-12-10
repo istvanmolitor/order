@@ -12,6 +12,8 @@ interface OrderShippingRepositoryInterface
 
     public function getOptions(): array;
 
+    public function getAllIds(): array;
+
     public function delete(OrderShipping $orderShipping);
 
     public function getAll();

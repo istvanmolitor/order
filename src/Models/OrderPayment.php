@@ -3,6 +3,7 @@
 namespace Molitor\Order\Models;
 
 use Molitor\Language\Models\TranslatableModel;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class OrderPayment extends TranslatableModel
 {
@@ -19,5 +20,10 @@ class OrderPayment extends TranslatableModel
     public function __toString(): string
     {
         return (string) $this->name;
+    }
+
+    public function shippings(): BelongsToMany
+    {
+        return $this->belongsToMany(OrderShipping::class, 'order_shipping_payments', 'order_payment_id', 'order_shipping_id');
     }
 }

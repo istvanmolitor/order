@@ -12,6 +12,8 @@ interface OrderPaymentRepositoryInterface
 
     public function getOptions(): array;
 
+    public function getAllIds(): array;
+
     public function delete(OrderPayment $orderPayment);
 
     public function getAll();

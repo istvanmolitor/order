@@ -12,6 +12,7 @@ return new class extends Migration
             $table->id();
             $table->string('code');
             $table->string('color', 9)->nullable();
+            $table->decimal('price', 11)->nullable();
             $table->timestamps();
         });
     }

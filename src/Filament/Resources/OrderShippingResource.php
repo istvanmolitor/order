@@ -20,7 +20,7 @@ use Molitor\Language\Filament\Components\TranslatableFields;
 use Molitor\Order\Filament\Resources\OrderShippingResource\Pages;
 use Molitor\Order\Models\OrderShipping;
 use Molitor\Order\Repositories\OrderPaymentRepositoryInterface;
-use Illuminate\Database\Eloquent\Model;
+use Molitor\Currency\Repositories\CurrencyRepositoryInterface;
 
 class OrderShippingResource extends Resource
 {
@@ -47,6 +47,8 @@ class OrderShippingResource extends Resource
     {
         /** @var OrderPaymentRepositoryInterface $orderPaymentRepository */
         $orderPaymentRepository = app(OrderPaymentRepositoryInterface::class);
+        /** @var CurrencyRepositoryInterface $currencyRepository */
+        $currencyRepository = app(CurrencyRepositoryInterface::class);
         return $schema->components([
             TextInput::make('code')
                 ->label(__('order::order_shipping.form.code'))
@@ -55,6 +57,12 @@ class OrderShippingResource extends Resource
             ColorPicker::make('color')
                 ->label('Szín')
                 ->nullable(),
+            TextInput::make('price')
+                ->label(__('order::common.price'))
+                ->suffix($currencyRepository->getDefault()->code)
+                ->numeric()
+                ->minValue(0)
+                ->maxValue(99999999999),
             TranslatableFields::schema([
                 TextInput::make('name')
                     ->label(__('order::order_shipping.form.name'))
@@ -82,6 +90,7 @@ class OrderShippingResource extends Resource
                 TextColumn::make('code')->label(__('order::order_shipping.table.code'))->searchable()->sortable(),
                 TextColumn::make('translation.name')->label(__('order::order_shipping.table.name'))->searchable()->sortable(),
                 ColorColumn::make('color')->label('Szín')->sortable(),
+                TextColumn::make('price')->label(__('order::common.price'))->numeric(2),
             ])
             ->actions([
                 EditAction::make(),

@@ -21,6 +21,7 @@ use Molitor\Order\Filament\Resources\OrderPaymentResource\Pages;
 use Molitor\Order\Models\OrderPayment;
 use Molitor\Order\Repositories\OrderShippingRepositoryInterface;
 use Illuminate\Database\Eloquent\Model;
+use Molitor\Currency\Repositories\CurrencyRepositoryInterface;
 
 class OrderPaymentResource extends Resource
 {
@@ -47,6 +48,8 @@ class OrderPaymentResource extends Resource
     {
         /** @var OrderShippingRepositoryInterface $orderShippingRepository */
         $orderShippingRepository = app(OrderShippingRepositoryInterface::class);
+        /** @var CurrencyRepositoryInterface $currencyRepository */
+        $currencyRepository = app(CurrencyRepositoryInterface::class);
         return $schema->components([
             TextInput::make('code')
                 ->label(__('order::order_payment.form.code'))
@@ -55,6 +58,12 @@ class OrderPaymentResource extends Resource
             ColorPicker::make('color')
                 ->label('Szín')
                 ->nullable(),
+            TextInput::make('price')
+                ->label(__('order::common.price'))
+                ->suffix($currencyRepository->getDefault()->code)
+                ->numeric()
+                ->minValue(0)
+                ->maxValue(99999999999),
             TranslatableFields::schema([
                 TextInput::make('name')
                     ->label(__('order::order_payment.form.name'))
@@ -82,6 +91,9 @@ class OrderPaymentResource extends Resource
                 TextColumn::make('code')->label(__('order::order_payment.table.code'))->searchable()->sortable(),
                 TextColumn::make('translation.name')->label(__('order::order_payment.table.name'))->searchable()->sortable(),
                 ColorColumn::make('color')->label('Szín')->sortable(),
+                TextColumn::make('price')
+                    ->label(__('order::common.price'))
+                    ->formatStateUsing(fn (OrderPayment $record) => (string) $record->getPrice()),
             ])
             ->actions([
                 EditAction::make(),

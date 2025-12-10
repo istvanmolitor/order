@@ -5,6 +5,7 @@ namespace Molitor\Order\Listeners;
 use Molitor\Currency\Events\DefaultCurrencyChanged;
 use Molitor\Currency\Services\Price;
 use Molitor\Order\Models\OrderShipping;
+use Molitor\Order\Models\OrderPayment;
 
 class DefaultCurrencyChangedListener
 {
@@ -15,6 +16,7 @@ class DefaultCurrencyChangedListener
             return;
         }
 
+        // Recalculate shipping prices
         OrderShipping::query()
             ->select(['id', 'price'])
             ->chunkById(200, function ($shippings) use ($event) {
@@ -26,6 +28,21 @@ class DefaultCurrencyChangedListener
                     if ((float) $shipping->price !== (float) $exchanged->price) {
                         $shipping->price = $exchanged->price;
                         $shipping->save();
+                    }
+                }
+            });
+
+        // Recalculate payment prices
+        OrderPayment::query()
+            ->select(['id', 'price'])
+            ->chunkById(200, function ($payments) use ($event) {
+                foreach ($payments as $payment) {
+                    $price = new Price((float) $payment->price, $event->previousCurrency);
+                    $exchanged = $price->exchange($event->currency);
+
+                    if ((float) $payment->price !== (float) $exchanged->price) {
+                        $payment->price = $exchanged->price;
+                        $payment->save();
                     }
                 }
             });

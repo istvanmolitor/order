@@ -3,6 +3,7 @@
 namespace Molitor\Order\Filament\Resources;
 
 use Filament\Forms\Components\ColorPicker;
+use Filament\Forms\Components\RichEditor;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Resources\Resource;
@@ -49,6 +50,7 @@ class OrderShippingResource extends Resource
         $orderPaymentRepository = app(OrderPaymentRepositoryInterface::class);
         /** @var CurrencyRepositoryInterface $currencyRepository */
         $currencyRepository = app(CurrencyRepositoryInterface::class);
+
         return $schema->components([
             TextInput::make('code')
                 ->label(__('order::order_shipping.form.code'))
@@ -68,7 +70,7 @@ class OrderShippingResource extends Resource
                     ->label(__('order::order_shipping.form.name'))
                     ->required()
                     ->maxLength(255),
-                Forms\Components\RichEditor::make('description')
+                RichEditor::make('description')
                     ->label(__('order::order_shipping.form.description'))
                     ->columnSpan(2),
             ])->columns(2),
@@ -90,7 +92,9 @@ class OrderShippingResource extends Resource
                 TextColumn::make('code')->label(__('order::order_shipping.table.code'))->searchable()->sortable(),
                 TextColumn::make('translation.name')->label(__('order::order_shipping.table.name'))->searchable()->sortable(),
                 ColorColumn::make('color')->label('Szín')->sortable(),
-                TextColumn::make('price')->label(__('order::common.price'))->numeric(2),
+                TextColumn::make('price')
+                    ->label(__('order::common.price'))
+                    ->formatStateUsing(fn (OrderShipping $record) => (string) $record->getPrice()),
             ])
             ->actions([
                 EditAction::make(),

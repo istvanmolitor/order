@@ -24,9 +24,11 @@ class OrderSeeder extends Seeder
             $this->command->error($e->getMessage());
         }
 
-        OrderStatus::create([
-            'code' => 'ordered',
-            'name' => 'Megrendelve',
+        // Seed order payments, shippings, and statuses
+        $this->call([
+            OrderPaymentSeeder::class,
+            OrderShippingSeeder::class,
+            OrderStatusSeeder::class,
         ]);
     }
 }

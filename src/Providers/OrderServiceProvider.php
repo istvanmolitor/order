@@ -9,6 +9,8 @@ use Molitor\Order\Repositories\OrderStatusRepositoryInterface;
 use Molitor\Order\Repositories\OrderStatusRepository;
 use Molitor\Order\Repositories\OrderItemRepositoryInterface;
 use Molitor\Order\Repositories\OrderItemRepository;
+use Molitor\Order\Repositories\OrderPaymentRepositoryInterface;
+use Molitor\Order\Repositories\OrderPaymentRepository;
 
 class OrderServiceProvider extends ServiceProvider
 {
@@ -23,5 +25,6 @@ class OrderServiceProvider extends ServiceProvider
         $this->app->bind(OrderRepositoryInterface::class, OrderRepository::class);
         $this->app->bind(OrderStatusRepositoryInterface::class, OrderStatusRepository::class);
         $this->app->bind(OrderItemRepositoryInterface::class, OrderItemRepository::class);
+        $this->app->bind(OrderPaymentRepositoryInterface::class, OrderPaymentRepository::class);
     }
 }

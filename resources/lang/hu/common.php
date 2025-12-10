@@ -13,6 +13,7 @@ return [
     'customer' => 'Vevő',
     'currency' => 'Pénznem',
     'order_status' => 'Rendelési státusz',
+    'order_payment' => 'Fizetési mód',
     'comment' => 'Megjegyzés',
     'internal_comment' => 'Belső megjegyzés',
     'phone' => 'Telefon',

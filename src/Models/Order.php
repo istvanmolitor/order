@@ -15,6 +15,7 @@ class Order extends Model
         'customer_id',
         'currency_id',
         'order_status_id',
+        'order_payment_id',
         'invoice_address_id',
         'shipping_address_id',
         'comment',
@@ -69,5 +70,10 @@ class Order extends Model
     public function orderStatus()
     {
         return $this->belongsTo(OrderStatus::class, 'order_status_id');
+    }
+
+    public function orderPayment()
+    {
+        return $this->belongsTo(OrderPayment::class, 'order_payment_id');
     }
 }

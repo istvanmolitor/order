@@ -3,6 +3,9 @@
 namespace Molitor\Order\Providers;
 
 use Illuminate\Support\ServiceProvider;
+use Illuminate\Support\Facades\Event;
+use Molitor\Currency\Events\DefaultCurrencyChanged;
+use Molitor\Order\Listeners\DefaultCurrencyChangedListener;
 use Molitor\Order\Repositories\OrderRepositoryInterface;
 use Molitor\Order\Repositories\OrderRepository;
 use Molitor\Order\Repositories\OrderStatusRepositoryInterface;
@@ -22,6 +25,9 @@ class OrderServiceProvider extends ServiceProvider
     {
         $this->loadMigrationsFrom(__DIR__ . '/../database/migrations');
         $this->loadTranslationsFrom(__DIR__ . '/../../resources/lang', 'order');
+
+        // Subscribe to currency default change to recalculate stored shipping prices
+        Event::listen(DefaultCurrencyChanged::class, [DefaultCurrencyChangedListener::class, 'handle']);
     }
 
     public function register()

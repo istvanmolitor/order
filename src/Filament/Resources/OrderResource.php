@@ -27,6 +27,7 @@ use Molitor\Order\Models\Order;
 use Molitor\Currency\Models\Currency;
 use Molitor\Order\Repositories\OrderStatusRepositoryInterface;
 use Molitor\Order\Repositories\OrderPaymentRepositoryInterface;
+use Molitor\Order\Repositories\OrderShippingRepositoryInterface;
 
 class OrderResource extends Resource
 {
@@ -57,6 +58,8 @@ class OrderResource extends Resource
         $orderStatusRepository = app(OrderStatusRepositoryInterface::class);
         /** @var OrderPaymentRepositoryInterface $orderPaymentRepository */
         $orderPaymentRepository = app(OrderPaymentRepositoryInterface::class);
+        /** @var OrderShippingRepositoryInterface $orderShippingRepository */
+        $orderShippingRepository = app(OrderShippingRepositoryInterface::class);
 
         return $schema->components([
             Tabs::make('order::common.general')->tabs([
@@ -94,6 +97,10 @@ class OrderResource extends Resource
                         Select::make('order_payment_id')
                             ->label(__('order::common.order_payment'))
                             ->options($orderPaymentRepository->getOptions())
+                            ->searchable(),
+                        Select::make('order_shipping_id')
+                            ->label(__('order::common.order_shipping'))
+                            ->options($orderShippingRepository->getOptions())
                             ->searchable(),
                         TextInput::make('phone')
                             ->label(__('order::common.phone'))

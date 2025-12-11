@@ -14,7 +14,7 @@ class CreateOrderPayment extends CreateRecord
     {
         /** @var OrderShippingPaymentRepositoryInterface $repo */
         $repo = app(OrderShippingPaymentRepositoryInterface::class);
-        $state = $this->form->getState();
+        $state = $this->form->getRawState();
         $repo->syncShippings((int) $this->record->id, (array) ($state['shippings'] ?? []));
     }
 }

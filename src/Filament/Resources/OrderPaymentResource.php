@@ -76,9 +76,15 @@ class OrderPaymentResource extends Resource
             Select::make('shippings')
                 ->label(__('order::order_payment.form.shippings'))
                 ->options($orderShippingRepository->getOptions())
-                ->multiple()
                 ->searchable()
                 ->preload()
+                ->multiple()
+                ->default(fn (?Model $record) => $record?->shippings?->pluck('id')->values()->all() ?? [])
+                ->afterStateHydrated(function (Select $component, ?Model $record): void {
+                    if ($record) {
+                        $component->state($record->shippings?->pluck('id')->values()->all() ?? []);
+                    }
+                })
                 ->dehydrated(false)
                 ->columnSpanFull(),
         ])->columns(1);

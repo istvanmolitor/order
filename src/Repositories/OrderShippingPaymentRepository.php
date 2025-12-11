@@ -23,15 +23,43 @@ class OrderShippingPaymentRepository implements OrderShippingPaymentRepositoryIn
             ->delete();
     }
 
-    public function syncPayments(int $shippingId, array $paymentIds): void
+    public function syncPayments(int $shippingId, array $payments): void
     {
         $shipping = OrderShipping::query()->findOrFail($shippingId);
-        $shipping->payments()->sync($paymentIds);
+        $ids = [];
+        foreach ($payments as $item) {
+            if (is_array($item)) {
+                $pid = (int) ($item['payment_id'] ?? $item['id'] ?? 0);
+                if ($pid > 0) {
+                    $ids[] = $pid;
+                }
+            } else {
+                $pid = (int) $item;
+                if ($pid > 0) {
+                    $ids[] = $pid;
+                }
+            }
+        }
+        $shipping->payments()->sync($ids);
     }
 
-    public function syncShippings(int $paymentId, array $shippingIds): void
+    public function syncShippings(int $paymentId, array $shippings): void
     {
         $payment = OrderPayment::query()->findOrFail($paymentId);
-        $payment->shippings()->sync($shippingIds);
+        $ids = [];
+        foreach ($shippings as $item) {
+            if (is_array($item)) {
+                $sid = (int) ($item['shipping_id'] ?? $item['id'] ?? 0);
+                if ($sid > 0) {
+                    $ids[] = $sid;
+                }
+            } else {
+                $sid = (int) $item;
+                if ($sid > 0) {
+                    $ids[] = $sid;
+                }
+            }
+        }
+        $payment->shippings()->sync($ids);
     }
 }

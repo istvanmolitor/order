@@ -14,7 +14,9 @@ class EditOrderPayment extends EditRecord
     {
         /** @var OrderShippingPaymentRepositoryInterface $repo */
         $repo = app(OrderShippingPaymentRepositoryInterface::class);
-        $state = $this->form->getState();
-        $repo->syncShippings((int) $this->record->id, (array) ($state['shippings'] ?? []));
+        $state = $this->form->getRawState();
+        if (array_key_exists('shippings', $state)) {
+            $repo->syncShippings((int) $this->record->id, (array) ($state['shippings'] ?? []));
+        }
     }
 }

@@ -22,6 +22,7 @@ use Molitor\Order\Filament\Resources\OrderShippingResource\Pages;
 use Molitor\Order\Models\OrderShipping;
 use Molitor\Order\Repositories\OrderPaymentRepositoryInterface;
 use Molitor\Currency\Repositories\CurrencyRepositoryInterface;
+use Illuminate\Database\Eloquent\Model;
 
 class OrderShippingResource extends Resource
 {
@@ -77,9 +78,15 @@ class OrderShippingResource extends Resource
             Select::make('payments')
                 ->label(__('order::order_shipping.form.payments'))
                 ->options($orderPaymentRepository->getOptions())
-                ->multiple()
                 ->searchable()
                 ->preload()
+                ->multiple()
+                ->default(fn (?Model $record) => $record?->payments?->pluck('id')->values()->all() ?? [])
+                ->afterStateHydrated(function (Select $component, ?Model $record): void {
+                    if ($record) {
+                        $component->state($record->payments?->pluck('id')->values()->all() ?? []);
+                    }
+                })
                 ->dehydrated(false)
                 ->columnSpanFull(),
         ])->columns(1);

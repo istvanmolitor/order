@@ -23,6 +23,7 @@ use Molitor\Order\Models\OrderShipping;
 use Molitor\Order\Repositories\OrderPaymentRepositoryInterface;
 use Molitor\Currency\Repositories\CurrencyRepositoryInterface;
 use Illuminate\Database\Eloquent\Model;
+use Molitor\Order\Services\ShippingHandler;
 
 class OrderShippingResource extends Resource
 {
@@ -51,12 +52,20 @@ class OrderShippingResource extends Resource
         $orderPaymentRepository = app(OrderPaymentRepositoryInterface::class);
         /** @var CurrencyRepositoryInterface $currencyRepository */
         $currencyRepository = app(CurrencyRepositoryInterface::class);
+        /** @var ShippingHandler $shippingService */
+        $shippingService = app(ShippingHandler::class);
 
         return $schema->components([
             TextInput::make('code')
                 ->label(__('order::order_shipping.form.code'))
                 ->maxLength(50)
                 ->unique(ignoreRecord: true),
+            Select::make('type')
+                ->label('Típus')
+                ->options($shippingService->getOptions())
+                ->searchable()
+                ->required(fn (?Model $record) => $record === null)
+                ->disabled(fn (?Model $record) => $record !== null),
             ColorPicker::make('color')
                 ->label('Szín')
                 ->nullable(),
@@ -98,6 +107,7 @@ class OrderShippingResource extends Resource
             ->columns([
                 TextColumn::make('code')->label(__('order::order_shipping.table.code'))->searchable()->sortable(),
                 TextColumn::make('translation.name')->label(__('order::order_shipping.table.name'))->searchable()->sortable(),
+                TextColumn::make('type')->label('Típus')->sortable(),
                 ColorColumn::make('color')->label('Szín')->sortable(),
                 TextColumn::make('price')
                     ->label(__('order::common.price'))

@@ -19,11 +19,16 @@ class Order extends Model
         'order_shipping_id',
         'invoice_address_id',
         'shipping_address_id',
+        'shipping_data',
         'comment',
         'internal_comment',
         'phone',
         'referer',
         'invoice',
+    ];
+
+    protected $casts = [
+        'shipping_data' => 'array',
     ];
 
     protected static function booted(): void

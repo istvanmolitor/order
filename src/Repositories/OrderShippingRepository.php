@@ -44,7 +44,7 @@ class OrderShippingRepository implements OrderShippingRepositoryInterface
 
     public function getAll()
     {
-        return $this->orderShipping->orderBy('name')->get();
+        return $this->orderShipping->joinTranslation()->orderByTranslation('name')->selectBase()->get();
     }
 
     public function getByCode(string $code): OrderShipping|null

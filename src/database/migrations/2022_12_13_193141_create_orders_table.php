@@ -46,6 +46,8 @@ class CreateOrdersTable extends Migration
             $table->unsignedBigInteger('order_shipping_id');
             $table->foreign('order_shipping_id')->references('id')->on('order_shippings');
 
+            $table->json('shipping_data')->nullable();
+
             $table->timestamps();
         });
     }

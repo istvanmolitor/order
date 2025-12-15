@@ -5,6 +5,8 @@ use Filament\Resources\Pages\EditRecord;
 use Molitor\Order\Filament\Resources\OrderResource;
 use Molitor\Address\Repositories\AddressRepositoryInterface;
 use Molitor\Address\Models\Address;
+use Molitor\Order\Models\OrderShipping;
+use Molitor\Order\Services\ShippingHandler;
 
 class EditOrder extends EditRecord
 {
@@ -56,6 +58,22 @@ class EditOrder extends EditRecord
             $addressRepository->saveAddress($shipping, $data['shipping_address']);
             $data['shipping_address_id'] = $shipping->id;
             unset($data['shipping_address']);
+        }
+
+        // Validate and normalize shipping-specific data
+        if (!empty($data['order_shipping_id'])) {
+            $orderShipping = OrderShipping::find($data['order_shipping_id']);
+            if ($orderShipping) {
+                /** @var ShippingHandler $handler */
+                $handler = app(ShippingHandler::class);
+                $type = $handler->getShippingType($orderShipping->type);
+                if ($type) {
+                    $payload = $data['shipping_data'] ?? [];
+                    $data['shipping_data'] = $type->prepare(is_array($payload) ? $payload : []);
+                }
+            }
+        } else {
+            $data['shipping_data'] = null;
         }
 
         return $data;

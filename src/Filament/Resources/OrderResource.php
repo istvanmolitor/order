@@ -11,6 +11,7 @@ use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Toggle;
+use Filament\Schemas\Components\Group;
 use Filament\Resources\Resource;
 use Filament\Schemas\Components\Grid;
 use Filament\Schemas\Components\Tabs;
@@ -28,6 +29,8 @@ use Molitor\Currency\Models\Currency;
 use Molitor\Order\Repositories\OrderStatusRepositoryInterface;
 use Molitor\Order\Repositories\OrderPaymentRepositoryInterface;
 use Molitor\Order\Repositories\OrderShippingRepositoryInterface;
+use Molitor\Order\Models\OrderShipping;
+use Molitor\Order\Services\ShippingHandler;
 
 class OrderResource extends Resource
 {
@@ -88,6 +91,7 @@ class OrderResource extends Resource
                             }),
                         Select::make('currency_id')
                             ->label(__('order::common.currency'))
+                            ->required()
                             ->options(Currency::query()->pluck('code', 'id')),
                         Select::make('order_status_id')
                             ->label(__('order::common.order_status'))
@@ -97,11 +101,33 @@ class OrderResource extends Resource
                         Select::make('order_payment_id')
                             ->label(__('order::common.order_payment'))
                             ->options($orderPaymentRepository->getOptions())
+                            ->required()
                             ->searchable(),
                         Select::make('order_shipping_id')
                             ->label(__('order::common.order_shipping'))
                             ->options($orderShippingRepository->getOptions())
-                            ->searchable(),
+                            ->searchable()
+                            ->required()
+                            ->reactive(),
+                        Group::make()
+                            ->schema(function ($get) {
+                                $id = $get('order_shipping_id');
+                                if (empty($id)) {
+                                    return [];
+                                }
+                                $shipping = OrderShipping::find($id);
+                                if (!$shipping) {
+                                    return [];
+                                }
+                                /** @var ShippingHandler $handler */
+                                $handler = app(ShippingHandler::class);
+                                $type = $handler->getShippingType($shipping->type);
+                                return $type?->getForm() ?? [];
+                            })
+                            ->visible(function ($get): bool {
+                                return !empty($get('order_shipping_id'));
+                            })
+                            ->columnSpanFull(),
                         TextInput::make('phone')
                             ->label(__('order::common.phone'))
                             ->maxLength(64),

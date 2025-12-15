@@ -35,7 +35,7 @@ class OrderPayment extends TranslatableModel
 
     public function getPrice(): Price
     {
-        return new Price($this->price, null);
+        return new Price((float)$this->price, null);
     }
 
     public function shippings(): BelongsToMany

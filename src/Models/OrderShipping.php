@@ -16,6 +16,7 @@ class OrderShipping extends TranslatableModel
     protected $fillable = [
         'code',
         'color',
+        'type',
         'price',
     ];
 
@@ -35,11 +36,21 @@ class OrderShipping extends TranslatableModel
 
     public function getPrice(): Price
     {
-        return new Price($this->price, null);
+        return new Price((float)$this->price, null);
     }
 
     public function payments(): BelongsToMany
     {
         return $this->belongsToMany(OrderPayment::class, 'order_shipping_payments', 'order_shipping_id', 'order_payment_id');
+    }
+
+    protected static function booted(): void
+    {
+        static::updating(function (self $model) {
+            // Prevent changing type after creation
+            if ($model->isDirty('type')) {
+                $model->type = $model->getOriginal('type');
+            }
+        });
     }
 }

@@ -12,6 +12,7 @@ class OrderShippingSeeder extends Seeder
         $items = [
             [
                 'code' => 'pickup',
+                'type' => 'warehouse',
                 'hu' => 'Személyes átvétel',
                 'en' => 'In-store pickup',
                 'de' => 'Abholung im Geschäft',
@@ -19,6 +20,7 @@ class OrderShippingSeeder extends Seeder
             ],
             [
                 'code' => 'courier',
+                'type' => 'address',
                 'hu' => 'Házhozszállítás futárral',
                 'en' => 'Home delivery (courier)',
                 'de' => 'Hauszustellung (Kurier)',
@@ -26,6 +28,7 @@ class OrderShippingSeeder extends Seeder
             ],
             [
                 'code' => 'point',
+                'type' => 'address',
                 'hu' => 'Átvételi pont',
                 'en' => 'Pickup point',
                 'de' => 'Abholstelle',
@@ -37,6 +40,7 @@ class OrderShippingSeeder extends Seeder
             /** @var OrderShipping $shipping */
             $shipping = OrderShipping::firstOrNew(['code' => $data['code']]);
             $shipping->code = $data['code'];
+            $shipping->type = $data['type'];
             // translations
             $shipping->setAttributeTranslation('name', $data['hu'], 'hu');
             $shipping->setAttributeTranslation('name', $data['en'], 'en');

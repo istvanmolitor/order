@@ -13,15 +13,28 @@ class OrderPaymentRepository implements OrderPaymentRepositoryInterface
         $this->orderPayment = new OrderPayment();
     }
 
-    public function getByName(string $name, int|string|null $language = null): ?OrderPayment
+    public function getByName(string $name): ?OrderPayment
     {
-        return $this->orderPayment->joinTranslation($language)->whereTranslation('name', $name)->first();
+        return $this->orderPayment->joinTranslation()->whereTranslation('name', $name)->first();
     }
 
     public function getOptions(): array
     {
         return $this->orderPayment
             ->get()
+            ->mapWithKeys(function (OrderPayment $payment) {
+                $label = $payment->name ?? null;
+                if ($label === null || $label === '') {
+                    $label = $payment->code ?: ('#' . (string) $payment->id);
+                }
+                return [$payment->id => (string) $label];
+            })
+            ->toArray();
+    }
+
+    public function getOptionsByShippingId(int $orderShippingId): array
+    {
+        return $this->getByShippingId($orderShippingId)
             ->mapWithKeys(function (OrderPayment $payment) {
                 $label = $payment->name ?? null;
                 if ($label === null || $label === '') {
@@ -44,11 +57,23 @@ class OrderPaymentRepository implements OrderPaymentRepositoryInterface
 
     public function getAll()
     {
-        return $this->orderPayment->orderBy('name')->get();
+        return $this->orderPayment->joinTranslation()->orderByTranslation('name')->selectBase()->get();
     }
 
     public function getByCode(string $code): OrderPayment|null
     {
         return $this->orderPayment->where('code', $code)->first();
+    }
+
+    public function getByShippingId(int $orderShippingId)
+    {
+        return $this->orderPayment
+            ->joinTranslation()
+            ->whereHas('shippings', function ($q) use ($orderShippingId) {
+                $q->where('order_shippings.id', $orderShippingId);
+            })
+            ->orderByTranslation('name')
+            ->selectBase()
+            ->get();
     }
 }

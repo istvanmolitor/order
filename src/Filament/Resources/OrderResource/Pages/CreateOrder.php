@@ -5,6 +5,8 @@ use Filament\Resources\Pages\CreateRecord;
 use Molitor\Order\Filament\Resources\OrderResource;
 use Molitor\Address\Repositories\AddressRepositoryInterface;
 use Molitor\Address\Models\Address;
+use Molitor\Order\Models\OrderShipping;
+use Molitor\Order\Services\ShippingHandler;
 
 class CreateOrder extends CreateRecord
 {
@@ -29,6 +31,22 @@ class CreateOrder extends CreateRecord
             $addressRepository->saveAddress($shipping, $data['shipping_address']);
             $data['shipping_address_id'] = $shipping->id;
             unset($data['shipping_address']);
+        }
+
+        // Validate and normalize shipping-specific data
+        if (!empty($data['order_shipping_id'])) {
+            $shipping = OrderShipping::find($data['order_shipping_id']);
+            if ($shipping) {
+                /** @var ShippingHandler $handler */
+                $handler = app(ShippingHandler::class);
+                $type = $handler->getShippingType($shipping->type);
+                if ($type) {
+                    $payload = $data['shipping_data'] ?? [];
+                    $data['shipping_data'] = $type->prepare(is_array($payload) ? $payload : []);
+                }
+            }
+        } else {
+            $data['shipping_data'] = null;
         }
 
         return $data;

@@ -15,7 +15,7 @@ class ShippingHandler
     {
         $this
             ->addShippingType(new AddressShippingType())
-            ->addShippingType(new WarehouseShippingType());
+            ->addShippingType(new SimpleShippingType());
     }
 
     public function addShippingType(ShippingType $shippingType): static

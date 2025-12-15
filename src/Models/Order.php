@@ -3,6 +3,7 @@
 namespace Molitor\Order\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Molitor\Address\Repositories\AddressRepositoryInterface;
 use Molitor\Address\Models\Address;
 use Molitor\Customer\Models\Customer;
 use Molitor\Order\Repositories\OrderRepositoryInterface;
@@ -44,6 +45,29 @@ class Order extends Model
             if (empty($order->code)) {
                 $orderRepository = app(OrderRepositoryInterface::class);
                 $order->code = $orderRepository->generateCode();
+            }
+        });
+
+        static::deleted(function (Order $order) {
+            /** @var AddressRepositoryInterface $addressRepository */
+            $addressRepository = app(AddressRepositoryInterface::class);
+
+            if ($order->relationLoaded('invoiceAddress')) {
+                $invoiceAddress = $order->getRelation('invoiceAddress');
+            } else {
+                $invoiceAddress = $order->invoiceAddress;
+            }
+            if ($invoiceAddress instanceof Address) {
+                $addressRepository->delete($invoiceAddress);
+            }
+
+            if ($order->relationLoaded('shippingAddress')) {
+                $shippingAddress = $order->getRelation('shippingAddress');
+            } else {
+                $shippingAddress = $order->shippingAddress;
+            }
+            if ($shippingAddress instanceof Address) {
+                $addressRepository->delete($shippingAddress);
             }
         });
     }

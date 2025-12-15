@@ -115,7 +115,9 @@ class OrderShippingResource extends Resource
             ])
             ->actions([
                 EditAction::make(),
-                DeleteAction::make(),
+                DeleteAction::make()
+                    ->disabled(fn (OrderShipping $record): bool => $record->isInUse())
+                    ->tooltip(fn (OrderShipping $record): ?string => $record->isInUse() ? __('Ezt a szállítási módot nem lehet törölni, mert meglévő rendelések használják.') : null),
             ])
             ->bulkActions([
                 BulkActionGroup::make([

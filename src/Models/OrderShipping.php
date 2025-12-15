@@ -5,6 +5,8 @@ namespace Molitor\Order\Models;
 use Molitor\Language\Models\TranslatableModel;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Molitor\Currency\Services\Price;
+use Illuminate\Validation\ValidationException;
+use Molitor\Order\Models\Order;
 
 class OrderShipping extends TranslatableModel
 {
@@ -52,5 +54,19 @@ class OrderShipping extends TranslatableModel
                 $model->type = $model->getOriginal('type');
             }
         });
+
+        // Törlés tiltása, ha rendelések hivatkoznak erre a szállítási módra
+        static::deleting(function (self $model) {
+            if ($model->isInUse()) {
+                throw ValidationException::withMessages([
+                    'order_shipping' => __('Ezt a szállítási módot nem lehet törölni, mert meglévő rendelések használják.'),
+                ]);
+            }
+        });
+    }
+
+    public function isInUse(): bool
+    {
+        return Order::where('order_shipping_id', $this->id)->exists();
     }
 }

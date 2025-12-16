@@ -3,6 +3,9 @@
 namespace Molitor\Order\Services;
 
 use Filament\Forms\Components\Textarea;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Contracts\View\Factory as ViewFactory;
+use Illuminate\Contracts\View\View as ViewContract;
 
 class SimpleShippingType extends ShippingType
 {
@@ -43,5 +46,19 @@ class SimpleShippingType extends ShippingType
             $formData['contact'] = (string) $shippingData;
         }
         return $formData;
+    }
+
+    public function validate(array $data): array
+    {
+        return Validator::make($data, [
+            'contact' => ['required', 'string', 'max:255'],
+        ])->validate();
+    }
+
+    public function view(array $data): ViewFactory|ViewContract
+    {
+        return view('order::shipping.simple', [
+            'contact' => $data['contact'] ?? '',
+        ]);
     }
 }

@@ -25,6 +25,7 @@ class OrderServiceProvider extends ServiceProvider
     {
         $this->loadMigrationsFrom(__DIR__ . '/../database/migrations');
         $this->loadTranslationsFrom(__DIR__ . '/../../resources/lang', 'order');
+        $this->loadViewsFrom(__DIR__ . '/../../resources/views', 'order');
 
         // Subscribe to currency default change to recalculate stored shipping prices
         Event::listen(DefaultCurrencyChanged::class, [DefaultCurrencyChangedListener::class, 'handle']);

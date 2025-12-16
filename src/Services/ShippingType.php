@@ -1,6 +1,8 @@
 <?php
 
 namespace Molitor\Order\Services;
+use Illuminate\Contracts\View\Factory as ViewFactory;
+use Illuminate\Contracts\View\View as ViewContract;
 
 abstract class ShippingType
 {
@@ -9,6 +11,10 @@ abstract class ShippingType
     abstract public function getLabel(): string;
 
     abstract public function getForm(): array;
+
+    abstract public function validate(array $data): array;
+
+    abstract public function view(array $data): ViewContract|ViewFactory;
 
     public function prepare(array $data): array
     {

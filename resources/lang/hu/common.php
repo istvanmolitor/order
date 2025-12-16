@@ -41,4 +41,8 @@ return [
     'timestamps' => 'Időbélyegek',
     'created_at' => 'Létrehozva',
     'updated_at' => 'Módosítva',
+    'contact' => 'Kapcsolat',
+    'contact_help' => 'Adja meg a kapcsolattartási információkat',
+    'simple' => 'Egyszerű',
+    'country' => 'Ország',
 ];

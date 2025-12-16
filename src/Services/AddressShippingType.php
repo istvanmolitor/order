@@ -26,4 +26,17 @@ class AddressShippingType extends ShippingType
             Address::make('address', __('order::common.address'))
         ];
     }
+
+    public function prepare(array $data): array
+    {
+        return $data['address'] ?? [];
+    }
+
+    public function fill(array $formData, ?array $shippingData): array
+    {
+        if (!empty($shippingData)) {
+            $formData['address'] = $shippingData;
+        }
+        return $formData;
+    }
 }

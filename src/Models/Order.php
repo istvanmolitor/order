@@ -3,6 +3,8 @@
 namespace Molitor\Order\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Molitor\Address\Repositories\AddressRepositoryInterface;
 use Molitor\Address\Models\Address;
 use Molitor\Customer\Models\Customer;
@@ -72,42 +74,42 @@ class Order extends Model
         });
     }
 
-    public function __toString()
+    public function __toString(): string
     {
         return $this->code;
     }
 
-    public function customer()
+    public function customer(): BelongsTo
     {
         return $this->belongsTo(Customer::class, 'customer_id');
     }
 
-    public function orderItems()
+    public function orderItems(): HasMany
     {
         return $this->hasMany(OrderItem::class, 'order_id');
     }
 
-    public function invoiceAddress()
+    public function invoiceAddress(): BelongsTo
     {
         return $this->belongsTo(Address::class, 'invoice_address_id');
     }
 
-    public function shippingAddress()
+    public function shippingAddress(): BelongsTo
     {
         return $this->belongsTo(Address::class, 'shipping_address_id');
     }
 
-    public function orderStatus()
+    public function orderStatus(): BelongsTo
     {
         return $this->belongsTo(OrderStatus::class, 'order_status_id');
     }
 
-    public function orderPayment()
+    public function orderPayment(): BelongsTo
     {
         return $this->belongsTo(OrderPayment::class, 'order_payment_id');
     }
 
-    public function orderShipping()
+    public function orderShipping(): BelongsTo
     {
         return $this->belongsTo(OrderShipping::class, 'order_shipping_id');
     }

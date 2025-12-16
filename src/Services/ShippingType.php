@@ -15,6 +15,11 @@ abstract class ShippingType
         return $data;
     }
 
+    public function fill(array $formData, ?array $shippingData): array
+    {
+        return $formData;
+    }
+
     public function isEnabled(): bool
     {
         return true;

@@ -41,9 +41,6 @@ class ShippingHandler
         return $options;
     }
 
-    /**
-     * Alias for compatibility with consumers expecting singular method name.
-     */
     public function getOption(): array
     {
         return $this->getOptions();

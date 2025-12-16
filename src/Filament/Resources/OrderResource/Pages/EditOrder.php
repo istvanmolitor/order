@@ -35,6 +35,16 @@ class EditOrder extends EditRecord
                 'address' => $ship->address,
             ];
         }
+
+        $orderShipping = $record->orderShipping;
+        if ($orderShipping) {
+            /** @var ShippingHandler $handler */
+            $handler = app(ShippingHandler::class);
+            $type = $handler->getShippingType($orderShipping->type);
+            if ($type) {
+                $data = $type->fill($data, $record->shipping_data);
+            }
+        }
         return $data;
     }
 
@@ -52,7 +62,6 @@ class EditOrder extends EditRecord
             unset($data['invoice_address']);
         }
 
-        // Shipping address (nullable FK)
         $shipping = $record->shippingAddress ?: new Address();
         if (isset($data['shipping_address']) && is_array($data['shipping_address'])) {
             $addressRepository->saveAddress($shipping, $data['shipping_address']);
@@ -60,16 +69,15 @@ class EditOrder extends EditRecord
             unset($data['shipping_address']);
         }
 
-        // Validate and normalize shipping-specific data
-        if (!empty($data['order_shipping_id'])) {
-            $orderShipping = OrderShipping::find($data['order_shipping_id']);
+        $shippingId = $data['order_shipping_id'] ?? $record->order_shipping_id;
+        if ($shippingId) {
+            $orderShipping = OrderShipping::find($shippingId);
             if ($orderShipping) {
                 /** @var ShippingHandler $handler */
                 $handler = app(ShippingHandler::class);
                 $type = $handler->getShippingType($orderShipping->type);
                 if ($type) {
-                    $payload = $data['shipping_data'] ?? [];
-                    $data['shipping_data'] = $type->prepare(is_array($payload) ? $payload : []);
+                    $data['shipping_data'] = $type->prepare($data);
                 }
             }
         } else {

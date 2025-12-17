@@ -4,6 +4,7 @@ namespace Molitor\Order\Providers;
 
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\Event;
+use Livewire\Livewire;
 use Molitor\Currency\Events\DefaultCurrencyChanged;
 use Molitor\Order\Listeners\DefaultCurrencyChangedListener;
 use Molitor\Order\Repositories\OrderRepositoryInterface;
@@ -18,6 +19,8 @@ use Molitor\Order\Repositories\OrderShippingRepositoryInterface;
 use Molitor\Order\Repositories\OrderShippingRepository;
 use Molitor\Order\Repositories\OrderShippingPaymentRepositoryInterface;
 use Molitor\Order\Repositories\OrderShippingPaymentRepository;
+use Molitor\Order\Http\Livewire\AddressShippingComponent;
+use Molitor\Order\Http\Livewire\SimpleShippingComponent;
 
 class OrderServiceProvider extends ServiceProvider
 {
@@ -26,6 +29,10 @@ class OrderServiceProvider extends ServiceProvider
         $this->loadMigrationsFrom(__DIR__ . '/../database/migrations');
         $this->loadTranslationsFrom(__DIR__ . '/../../resources/lang', 'order');
         $this->loadViewsFrom(__DIR__ . '/../../resources/views', 'order');
+
+        // Register Livewire components
+        Livewire::component('order::address-shipping-component', AddressShippingComponent::class);
+        Livewire::component('order::simple-shipping-component', SimpleShippingComponent::class);
 
         // Subscribe to currency default change to recalculate stored shipping prices
         Event::listen(DefaultCurrencyChanged::class, [DefaultCurrencyChangedListener::class, 'handle']);

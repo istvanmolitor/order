@@ -16,6 +16,8 @@ abstract class ShippingType
 
     abstract public function view(array $data): ViewContract|ViewFactory;
 
+    abstract public function getLivewireComponent(): string;
+
     public function prepare(array $data): array
     {
         return $data;

@@ -61,4 +61,9 @@ class SimpleShippingType extends ShippingType
             'contact' => $data['contact'] ?? '',
         ]);
     }
+
+    public function getLivewireComponent(): string
+    {
+        return 'order::simple-shipping-component';
+    }
 }

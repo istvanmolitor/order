@@ -8,6 +8,7 @@ use Illuminate\Contracts\View\Factory as ViewFactory;
 use Illuminate\Contracts\View\View as ViewContract;
 use Illuminate\Support\Facades\Validator;
 use Molitor\Address\Filament\Components\Address;
+use Molitor\Address\Repositories\CountryRepositoryInterface;
 
 class AddressShippingType extends ShippingType
 {
@@ -56,8 +57,17 @@ class AddressShippingType extends ShippingType
 
     public function view(array $data): ViewContract|ViewFactory
     {
+        $countryRepository = app(CountryRepositoryInterface::class);
+
         return view('order::shipping.address', [
             'address' => $data['address'] ?? [],
+            'countries' => $countryRepository->getAll(),
+            'defaultCountryId' => $countryRepository->getDefaultId(),
         ]);
+    }
+
+    public function getLivewireComponent(): string
+    {
+        return 'order::address-shipping-component';
     }
 }

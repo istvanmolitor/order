@@ -45,4 +45,10 @@ class ShippingHandler
     {
         return $this->getOptions();
     }
+
+    public function getLivewireComponentName(string $shippingTypeName): ?string
+    {
+        $shippingType = $this->getShippingType($shippingTypeName);
+        return $shippingType?->getLivewireComponent();
+    }
 }

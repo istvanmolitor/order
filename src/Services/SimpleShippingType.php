@@ -55,13 +55,6 @@ class SimpleShippingType extends ShippingType
         ])->validate();
     }
 
-    public function view(array $data): ViewFactory|ViewContract
-    {
-        return view('order::shipping.simple', [
-            'contact' => $data['contact'] ?? '',
-        ]);
-    }
-
     public function getLivewireComponent(): string
     {
         return 'order::simple-shipping-component';

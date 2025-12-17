@@ -55,17 +55,6 @@ class AddressShippingType extends ShippingType
         ])->validate();
     }
 
-    public function view(array $data): ViewContract|ViewFactory
-    {
-        $countryRepository = app(CountryRepositoryInterface::class);
-
-        return view('order::shipping.address', [
-            'address' => $data['address'] ?? [],
-            'countries' => $countryRepository->getAll(),
-            'defaultCountryId' => $countryRepository->getDefaultId(),
-        ]);
-    }
-
     public function getLivewireComponent(): string
     {
         return 'order::address-shipping-component';

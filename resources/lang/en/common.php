@@ -12,4 +12,5 @@ return [
     'country' => 'Country',
     'zip_code' => 'Zip Code',
     'city' => 'City',
+    'select_country' => 'Select a country',
 ];

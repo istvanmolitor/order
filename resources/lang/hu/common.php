@@ -45,4 +45,5 @@ return [
     'contact_help' => 'Adja meg a kapcsolattartási információkat',
     'simple' => 'Egyszerű',
     'country' => 'Ország',
+    'select_country' => 'Válasszon országot',
 ];

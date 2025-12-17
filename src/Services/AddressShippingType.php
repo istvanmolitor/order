@@ -52,6 +52,18 @@ class AddressShippingType extends ShippingType
             'address.zip_code' => ['required', 'string', 'max:10'],
             'address.city' => ['required', 'string', 'max:255'],
             'address.address' => ['required', 'string', 'max:255'],
+        ], [
+            'address.required' => __('order::validation.address.required'),
+            'address.name.required' => __('order::validation.address.name.required'),
+            'address.name.max' => __('order::validation.address.name.max'),
+            'address.country_id.required' => __('order::validation.address.country_id.required'),
+            'address.country_id.exists' => __('order::validation.address.country_id.exists'),
+            'address.zip_code.required' => __('order::validation.address.zip_code.required'),
+            'address.zip_code.max' => __('order::validation.address.zip_code.max'),
+            'address.city.required' => __('order::validation.address.city.required'),
+            'address.city.max' => __('order::validation.address.city.max'),
+            'address.address.required' => __('order::validation.address.address.required'),
+            'address.address.max' => __('order::validation.address.address.max'),
         ])->validate();
     }
 

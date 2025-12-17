@@ -52,6 +52,9 @@ class SimpleShippingType extends ShippingType
     {
         return Validator::make($data, [
             'contact' => ['required', 'string', 'max:255'],
+        ], [
+            'contact.required' => __('order::validation.contact.required'),
+            'contact.max' => __('order::validation.contact.max'),
         ])->validate();
     }
 

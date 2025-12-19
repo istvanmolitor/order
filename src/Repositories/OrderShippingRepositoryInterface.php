@@ -17,4 +17,6 @@ interface OrderShippingRepositoryInterface
     public function delete(OrderShipping $orderShipping);
 
     public function getAll();
+
+    public function getById(int $shippingId): OrderShipping|null;
 }

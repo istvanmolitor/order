@@ -24,7 +24,6 @@ class OrderSeeder extends Seeder
             $this->command->error($e->getMessage());
         }
 
-        // Seed order payments, shippings, and statuses
         $this->call([
             OrderPaymentSeeder::class,
             OrderShippingSeeder::class,

@@ -1,8 +1,6 @@
 <?php
 
 namespace Molitor\Order\Services;
-use Illuminate\Contracts\View\Factory as ViewFactory;
-use Illuminate\Contracts\View\View as ViewContract;
 
 abstract class ShippingType
 {
@@ -12,9 +10,12 @@ abstract class ShippingType
 
     abstract public function getForm(): array;
 
-    abstract public function validate(array $data): array;
+    abstract public function validationRules(array $data): array;
 
-    abstract public function getLivewireComponent(): string;
+    public function isEnabled(): bool
+    {
+        return true;
+    }
 
     public function prepare(array $data): array
     {
@@ -23,11 +24,25 @@ abstract class ShippingType
 
     public function fill(array $formData, ?array $shippingData): array
     {
+        if (empty($shippingData)) {
+            $formData = $this->getDefaultValues();
+        } else {
+            $formData = $shippingData;
+        }
         return $formData;
     }
 
-    public function isEnabled(): bool
+    abstract public function getDefaultValues(): array;
+
+    abstract public function getFormTemplate(): string;
+
+    public function getFormTemplateData(): array
     {
-        return true;
+        return [];
+    }
+
+    public function getAction(): string|null
+    {
+        return null;
     }
 }

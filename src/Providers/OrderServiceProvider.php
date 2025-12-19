@@ -30,11 +30,6 @@ class OrderServiceProvider extends ServiceProvider
         $this->loadTranslationsFrom(__DIR__ . '/../../resources/lang', 'order');
         $this->loadViewsFrom(__DIR__ . '/../../resources/views', 'order');
 
-        // Register Livewire components
-        Livewire::component('order::address-shipping-component', AddressShippingComponent::class);
-        Livewire::component('order::simple-shipping-component', SimpleShippingComponent::class);
-
-        // Subscribe to currency default change to recalculate stored shipping prices
         Event::listen(DefaultCurrencyChanged::class, [DefaultCurrencyChangedListener::class, 'handle']);
     }
 

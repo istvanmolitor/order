@@ -19,8 +19,6 @@ use Illuminate\Support\Facades\Gate;
 use Molitor\Language\Filament\Components\TranslatableFields;
 use Molitor\Order\Filament\Resources\OrderPaymentResource\Pages;
 use Molitor\Order\Models\OrderPayment;
-use Molitor\Order\Repositories\OrderShippingRepositoryInterface;
-use Illuminate\Database\Eloquent\Model;
 use Molitor\Currency\Repositories\CurrencyRepositoryInterface;
 
 class OrderPaymentResource extends Resource
@@ -46,8 +44,6 @@ class OrderPaymentResource extends Resource
 
     public static function form(Schema $schema): Schema
     {
-        /** @var OrderShippingRepositoryInterface $orderShippingRepository */
-        $orderShippingRepository = app(OrderShippingRepositoryInterface::class);
         /** @var CurrencyRepositoryInterface $currencyRepository */
         $currencyRepository = app(CurrencyRepositoryInterface::class);
         return $schema->components([
@@ -73,20 +69,6 @@ class OrderPaymentResource extends Resource
                     ->label(__('order::order_payment.form.description'))
                     ->columnSpan(2),
             ])->columns(2),
-            Select::make('shippings')
-                ->label(__('order::order_payment.form.shippings'))
-                ->options($orderShippingRepository->getOptions())
-                ->searchable()
-                ->preload()
-                ->multiple()
-                ->default(fn (?Model $record) => $record?->shippings?->pluck('id')->values()->all() ?? [])
-                ->afterStateHydrated(function (Select $component, ?Model $record): void {
-                    if ($record) {
-                        $component->state($record->shippings?->pluck('id')->values()->all() ?? []);
-                    }
-                })
-                ->dehydrated(false)
-                ->columnSpanFull(),
         ])->columns(1);
     }
 

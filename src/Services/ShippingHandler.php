@@ -2,6 +2,8 @@
 
 namespace Molitor\Order\Services;
 
+use Molitor\Order\Models\OrderShipping;
+
 class ShippingHandler
 {
     private array $shippingTypes = [];
@@ -46,9 +48,24 @@ class ShippingHandler
         return $this->getOptions();
     }
 
-    public function getLivewireComponentName(string $shippingTypeName): ?string
+    public function getDefaultValues(string $shippingTypeName): array
     {
         $shippingType = $this->getShippingType($shippingTypeName);
-        return $shippingType?->getLivewireComponent();
+        if(!$shippingType) {
+           return [];
+        }
+        return $shippingType->getDefaultValues();
+    }
+
+    public function renderForm(OrderShipping $orderShipping, array $params = []): string
+    {
+        $shippingType = $this->getShippingType($orderShipping->type);
+        if(!$shippingType) {
+            return '';
+        }
+
+        $formTemplate = $shippingType->getFormTemplate();
+
+        return view($formTemplate, $params)->render();
     }
 }

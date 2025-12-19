@@ -51,4 +51,9 @@ class OrderShippingRepository implements OrderShippingRepositoryInterface
     {
         return $this->orderShipping->where('code', $code)->first();
     }
+
+    public function getById(int $shippingId): OrderShipping|null
+    {
+        return $this->orderShipping->where('id', $shippingId)->first();
+    }
 }

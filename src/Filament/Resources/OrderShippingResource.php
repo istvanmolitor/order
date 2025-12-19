@@ -90,6 +90,8 @@ class OrderShippingResource extends Resource
                 ->searchable()
                 ->preload()
                 ->multiple()
+                ->required()
+                ->minItems(1)
                 ->default(fn (?Model $record) => $record?->payments?->pluck('id')->values()->all() ?? [])
                 ->afterStateHydrated(function (Select $component, ?Model $record): void {
                     if ($record) {

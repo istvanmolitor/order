@@ -46,4 +46,5 @@ return [
     'simple' => 'Egyszerű',
     'country' => 'Ország',
     'select_country' => 'Válasszon országot',
+    'street_and_number' => 'Utca és házszám',
 ];

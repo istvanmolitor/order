@@ -2,10 +2,6 @@
 
 namespace Molitor\Order\Services;
 
-use Filament\Forms\Components\Textarea;
-use Filament\Forms\Components\TextInput;
-use Illuminate\Contracts\View\Factory as ViewFactory;
-use Illuminate\Contracts\View\View as ViewContract;
 use Illuminate\Support\Facades\Validator;
 use Molitor\Address\Filament\Components\Address;
 use Molitor\Address\Repositories\CountryRepositoryInterface;
@@ -32,43 +28,43 @@ class AddressShippingType extends ShippingType
 
     public function prepare(array $data): array
     {
-        return $data['address'] ?? [];
+        return $data ?? [];
     }
 
-    public function fill(array $formData, ?array $shippingData): array
+    public function validationRules(array $data): array
     {
-        if (!empty($shippingData)) {
-            $formData['address'] = $shippingData;
-        }
-        return $formData;
+        return [
+            'name' => ['required', 'string', 'max:255'],
+            'country_id' => ['required', 'integer', 'exists:countries,id'],
+            'zip_code' => ['required', 'string', 'max:10'],
+            'city' => ['required', 'string', 'max:255'],
+            'address' => ['required', 'string', 'max:255'],
+        ];
     }
 
-    public function validate(array $data): array
+    public function getDefaultValues(): array
     {
-        return Validator::make($data, [
-            'address' => ['required', 'array'],
-            'address.name' => ['required', 'string', 'max:255'],
-            'address.country_id' => ['required', 'integer', 'exists:countries,id'],
-            'address.zip_code' => ['required', 'string', 'max:10'],
-            'address.city' => ['required', 'string', 'max:255'],
-            'address.address' => ['required', 'string', 'max:255'],
-        ], [
-            'address.required' => __('order::validation.address.required'),
-            'address.name.required' => __('order::validation.address.name.required'),
-            'address.name.max' => __('order::validation.address.name.max'),
-            'address.country_id.required' => __('order::validation.address.country_id.required'),
-            'address.country_id.exists' => __('order::validation.address.country_id.exists'),
-            'address.zip_code.required' => __('order::validation.address.zip_code.required'),
-            'address.zip_code.max' => __('order::validation.address.zip_code.max'),
-            'address.city.required' => __('order::validation.address.city.required'),
-            'address.city.max' => __('order::validation.address.city.max'),
-            'address.address.required' => __('order::validation.address.address.required'),
-            'address.address.max' => __('order::validation.address.address.max'),
-        ])->validate();
+        return [
+            'name' => '',
+            'country_id' => app(CountryRepositoryInterface::class)->getDefaultId(),
+            'zip_code' => '',
+            'city' => '',
+            'address' => '',
+        ];
     }
 
-    public function getLivewireComponent(): string
+    public function getFormTemplate(): string
     {
-        return 'order::address-shipping-component';
+        return 'order::shipping.address';
+    }
+
+    public function getFormTemplateData(): array
+    {
+        /** @var CountryRepositoryInterface $countryRepository */
+        $countryRepository = app(CountryRepositoryInterface::class);
+        return [
+            'countries' => $countryRepository->getOptions(),
+            'defaultCountryId' => $countryRepository->getDefaultId(),
+        ];
     }
 }

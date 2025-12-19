@@ -4,8 +4,6 @@ namespace Molitor\Order\Services;
 
 use Filament\Forms\Components\Textarea;
 use Illuminate\Support\Facades\Validator;
-use Illuminate\Contracts\View\Factory as ViewFactory;
-use Illuminate\Contracts\View\View as ViewContract;
 
 class SimpleShippingType extends ShippingType
 {
@@ -30,36 +28,22 @@ class SimpleShippingType extends ShippingType
         ];
     }
 
-    public function prepare(array $data): array
+    public function validationRules(array $data): array
     {
         return [
-            'contact' => $data['contact'] ?? null,
+            'contact' => ['required', 'string', 'max:255'],
         ];
     }
 
-    public function fill(array $formData, ?array $shippingData): array
+    public function getDefaultValues(): array
     {
-        if (is_array($shippingData)) {
-            $formData['contact'] = $shippingData['contact'] ?? null;
-        } elseif (is_string($shippingData) || is_numeric($shippingData)) {
-            // Backward compatibility if stored as scalar
-            $formData['contact'] = (string) $shippingData;
-        }
-        return $formData;
+        return [
+            'contact' => '',
+        ];
     }
 
-    public function validate(array $data): array
+    public function getFormTemplate(): string
     {
-        return Validator::make($data, [
-            'contact' => ['required', 'string', 'max:255'],
-        ], [
-            'contact.required' => __('order::validation.contact.required'),
-            'contact.max' => __('order::validation.contact.max'),
-        ])->validate();
-    }
-
-    public function getLivewireComponent(): string
-    {
-        return 'order::simple-shipping-component';
+        return 'order::shipping.simple';
     }
 }

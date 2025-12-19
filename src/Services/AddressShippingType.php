@@ -67,4 +67,19 @@ class AddressShippingType extends ShippingType
             'defaultCountryId' => $countryRepository->getDefaultId(),
         ];
     }
+
+    public function renderView(array $shippingData): string
+    {
+        $countryName = null;
+        if (isset($shippingData['country_id'])) {
+            /** @var CountryRepositoryInterface $countryRepository */
+            $countryRepository = app(CountryRepositoryInterface::class);
+            $country = $countryRepository->getById($shippingData['country_id']);
+            $countryName = $country->name ?? null;
+        }
+
+        return view('order::shipping.address-display', array_merge($shippingData, [
+            'countryName' => $countryName,
+        ]))->render();
+    }
 }

@@ -46,4 +46,11 @@ class SimpleShippingType extends ShippingType
     {
         return 'order::shipping.simple';
     }
+
+    public function renderView(array $shippingData): string
+    {
+        return view('order::shipping.simple-display', [
+            'data' => $shippingData,
+        ])->render();
+    }
 }

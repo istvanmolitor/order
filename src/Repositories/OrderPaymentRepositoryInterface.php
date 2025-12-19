@@ -33,4 +33,6 @@ interface OrderPaymentRepositoryInterface
      * @return \Illuminate\Support\Collection|OrderPayment[]
      */
     public function getByShippingId(int $orderShippingId);
+
+    public function getById(int $paymentId): OrderPayment|null;
 }

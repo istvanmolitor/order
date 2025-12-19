@@ -45,4 +45,12 @@ abstract class ShippingType
     {
         return null;
     }
+
+    /**
+     * Render the view for displaying shipping data (e.g., on finalize page)
+     *
+     * @param array $shippingData The shipping data to display
+     * @return string The rendered HTML
+     */
+    abstract public function renderView(array $shippingData): string;
 }

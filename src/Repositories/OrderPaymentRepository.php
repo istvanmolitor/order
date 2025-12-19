@@ -76,4 +76,9 @@ class OrderPaymentRepository implements OrderPaymentRepositoryInterface
             ->selectBase()
             ->get();
     }
+
+    public function getById(int $paymentId): OrderPayment|null
+    {
+        return $this->orderPayment->where('id', $paymentId)->first();
+    }
 }

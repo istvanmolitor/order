@@ -6,30 +6,30 @@ use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteAction;
 use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
+use Filament\Actions\ViewAction;
 use Filament\Forms\Components\Repeater;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Toggle;
-use Filament\Schemas\Components\Group;
 use Filament\Resources\Resource;
 use Filament\Schemas\Components\Grid;
+use Filament\Schemas\Components\Group;
 use Filament\Schemas\Components\Tabs;
 use Filament\Schemas\Schema;
-use Filament\Tables\Table;
 use Filament\Tables\Columns\TextColumn;
-use Filament\Actions\ViewAction;
 use Filament\Tables\Filters\SelectFilter;
+use Filament\Tables\Table;
 use Illuminate\Support\Facades\Gate;
 use Molitor\Address\Filament\Components\Address;
+use Molitor\Currency\Models\Currency;
 use Molitor\Customer\Repositories\CustomerRepositoryInterface;
 use Molitor\Order\Filament\Resources\OrderResource\Pages;
 use Molitor\Order\Models\Order;
-use Molitor\Currency\Models\Currency;
-use Molitor\Order\Repositories\OrderStatusRepositoryInterface;
+use Molitor\Order\Models\OrderShipping;
 use Molitor\Order\Repositories\OrderPaymentRepositoryInterface;
 use Molitor\Order\Repositories\OrderShippingRepositoryInterface;
-use Molitor\Order\Models\OrderShipping;
+use Molitor\Order\Repositories\OrderStatusRepositoryInterface;
 use Molitor\Order\Services\ShippingHandler;
 
 class OrderResource extends Resource
@@ -116,16 +116,17 @@ class OrderResource extends Resource
                                     return [];
                                 }
                                 $shipping = OrderShipping::find($id);
-                                if (!$shipping) {
+                                if (! $shipping) {
                                     return [];
                                 }
                                 /** @var ShippingHandler $handler */
                                 $handler = app(ShippingHandler::class);
                                 $type = $handler->getShippingType($shipping->type);
+
                                 return $type?->getForm() ?? [];
                             })
                             ->visible(function ($get): bool {
-                                return !empty($get('order_shipping_id'));
+                                return ! empty($get('order_shipping_id'));
                             })
                             ->columnSpanFull(),
                         TextInput::make('phone')
@@ -153,7 +154,7 @@ class OrderResource extends Resource
                                 Select::make('product_id')
                                     ->label(__('order::common.product'))
                                     ->searchable()
-                                    ->getOptionLabelFromRecordUsing(fn($record) => (string) $record)
+                                    ->getOptionLabelFromRecordUsing(fn ($record) => (string) $record)
                                     ->relationship('product', 'id')
                                     ->required()
                                     ->columnSpan(2),
@@ -167,7 +168,7 @@ class OrderResource extends Resource
                         ->columns(1)
                         ->defaultItems(1)
                         ->addActionLabel(__('order::common.add_item')),
-                    ]),
+                ]),
             ]),
         ])->columns(1);
     }

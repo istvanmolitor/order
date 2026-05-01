@@ -10,7 +10,7 @@ class OrderShippingRepository implements OrderShippingRepositoryInterface
 
     public function __construct()
     {
-        $this->orderShipping = new OrderShipping();
+        $this->orderShipping = new OrderShipping;
     }
 
     public function getByName(string $name, int|string|null $language = null): ?OrderShipping
@@ -25,8 +25,9 @@ class OrderShippingRepository implements OrderShippingRepositoryInterface
             ->mapWithKeys(function (OrderShipping $shipping) {
                 $label = $shipping->name ?? null;
                 if ($label === null || $label === '') {
-                    $label = $shipping->code ?: ('#' . (string) $shipping->id);
+                    $label = $shipping->code ?: ('#'.(string) $shipping->id);
                 }
+
                 return [$shipping->id => (string) $label];
             })
             ->toArray();
@@ -47,12 +48,12 @@ class OrderShippingRepository implements OrderShippingRepositoryInterface
         return $this->orderShipping->joinTranslation()->orderByTranslation('name')->selectBase()->get();
     }
 
-    public function getByCode(string $code): OrderShipping|null
+    public function getByCode(string $code): ?OrderShipping
     {
         return $this->orderShipping->where('code', $code)->first();
     }
 
-    public function getById(int $shippingId): OrderShipping|null
+    public function getById(int $shippingId): ?OrderShipping
     {
         return $this->orderShipping->where('id', $shippingId)->first();
     }

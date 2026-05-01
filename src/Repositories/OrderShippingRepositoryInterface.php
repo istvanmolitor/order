@@ -6,7 +6,7 @@ use Molitor\Order\Models\OrderShipping;
 
 interface OrderShippingRepositoryInterface
 {
-    public function getByCode(string $code): OrderShipping|null;
+    public function getByCode(string $code): ?OrderShipping;
 
     public function getByName(string $name): ?OrderShipping;
 
@@ -18,5 +18,5 @@ interface OrderShippingRepositoryInterface
 
     public function getAll();
 
-    public function getById(int $shippingId): OrderShipping|null;
+    public function getById(int $shippingId): ?OrderShipping;
 }

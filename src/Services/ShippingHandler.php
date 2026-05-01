@@ -16,17 +16,18 @@ class ShippingHandler
     public function init(): void
     {
         $this
-            ->addShippingType(new AddressShippingType())
-            ->addShippingType(new SimpleShippingType());
+            ->addShippingType(new AddressShippingType)
+            ->addShippingType(new SimpleShippingType);
     }
 
     public function addShippingType(ShippingType $shippingType): static
     {
         $this->shippingTypes[$shippingType->getName()] = $shippingType;
+
         return $this;
     }
 
-    public function getShippingType(string $name): ShippingType|null
+    public function getShippingType(string $name): ?ShippingType
     {
         return $this->shippingTypes[$name] ?? null;
     }
@@ -36,10 +37,11 @@ class ShippingHandler
         $options = [];
         /** @var ShippingType $shippingType */
         foreach ($this->shippingTypes as $shippingType) {
-            if( $shippingType->isEnabled()) {
+            if ($shippingType->isEnabled()) {
                 $options[$shippingType->getName()] = $shippingType->getLabel();
             }
         }
+
         return $options;
     }
 
@@ -51,16 +53,17 @@ class ShippingHandler
     public function getDefaultValues(string $shippingTypeName): array
     {
         $shippingType = $this->getShippingType($shippingTypeName);
-        if(!$shippingType) {
-           return [];
+        if (! $shippingType) {
+            return [];
         }
+
         return $shippingType->getDefaultValues();
     }
 
     public function renderForm(OrderShipping $orderShipping, array $params = []): string
     {
         $shippingType = $this->getShippingType($orderShipping->type);
-        if(!$shippingType) {
+        if (! $shippingType) {
             return '';
         }
 

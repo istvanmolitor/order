@@ -4,8 +4,8 @@ namespace Molitor\Order\Listeners;
 
 use Molitor\Currency\Events\DefaultCurrencyChanged;
 use Molitor\Currency\Services\Price;
-use Molitor\Order\Models\OrderShipping;
 use Molitor\Order\Models\OrderPayment;
+use Molitor\Order\Models\OrderShipping;
 
 class DefaultCurrencyChangedListener
 {

@@ -16,9 +16,8 @@ class OrderRepository implements OrderRepositoryInterface
 
     public function __construct(
         private AddressRepositoryInterface $addressRepository
-    )
-    {
-        $this->order = new Order();
+    ) {
+        $this->order = new Order;
     }
 
     public function delete(Order $order): void
@@ -52,11 +51,11 @@ class OrderRepository implements OrderRepositoryInterface
     public function generateCode(): string
     {
         $date = now()->format('ymd');
-        $prefix = 'ORD-' . $date . '-';
+        $prefix = 'ORD-'.$date.'-';
         do {
             $suffix = strtoupper(Str::random(6));
             $suffix = preg_replace('/[^A-Z0-9]/', substr('ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789', rand(0, 35), 1), $suffix);
-            $code = $prefix . $suffix;
+            $code = $prefix.$suffix;
             $exists = $this->codeExists($code);
         } while ($exists);
 

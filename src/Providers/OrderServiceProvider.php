@@ -2,33 +2,30 @@
 
 namespace Molitor\Order\Providers;
 
-use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\Event;
-use Livewire\Livewire;
+use Illuminate\Support\ServiceProvider;
 use Molitor\Currency\Events\DefaultCurrencyChanged;
 use Molitor\Order\Listeners\DefaultCurrencyChangedListener;
-use Molitor\Order\Repositories\OrderRepositoryInterface;
-use Molitor\Order\Repositories\OrderRepository;
-use Molitor\Order\Repositories\OrderStatusRepositoryInterface;
-use Molitor\Order\Repositories\OrderStatusRepository;
-use Molitor\Order\Repositories\OrderItemRepositoryInterface;
 use Molitor\Order\Repositories\OrderItemRepository;
-use Molitor\Order\Repositories\OrderPaymentRepositoryInterface;
+use Molitor\Order\Repositories\OrderItemRepositoryInterface;
 use Molitor\Order\Repositories\OrderPaymentRepository;
-use Molitor\Order\Repositories\OrderShippingRepositoryInterface;
-use Molitor\Order\Repositories\OrderShippingRepository;
-use Molitor\Order\Repositories\OrderShippingPaymentRepositoryInterface;
+use Molitor\Order\Repositories\OrderPaymentRepositoryInterface;
+use Molitor\Order\Repositories\OrderRepository;
+use Molitor\Order\Repositories\OrderRepositoryInterface;
 use Molitor\Order\Repositories\OrderShippingPaymentRepository;
-use Molitor\Order\Http\Livewire\AddressShippingComponent;
-use Molitor\Order\Http\Livewire\SimpleShippingComponent;
+use Molitor\Order\Repositories\OrderShippingPaymentRepositoryInterface;
+use Molitor\Order\Repositories\OrderShippingRepository;
+use Molitor\Order\Repositories\OrderShippingRepositoryInterface;
+use Molitor\Order\Repositories\OrderStatusRepository;
+use Molitor\Order\Repositories\OrderStatusRepositoryInterface;
 
 class OrderServiceProvider extends ServiceProvider
 {
     public function boot()
     {
-        $this->loadMigrationsFrom(__DIR__ . '/../database/migrations');
-        $this->loadTranslationsFrom(__DIR__ . '/../../resources/lang', 'order');
-        $this->loadViewsFrom(__DIR__ . '/../../resources/views', 'order');
+        $this->loadMigrationsFrom(__DIR__.'/../database/migrations');
+        $this->loadTranslationsFrom(__DIR__.'/../../resources/lang', 'order');
+        $this->loadViewsFrom(__DIR__.'/../../resources/views', 'order');
 
         Event::listen(DefaultCurrencyChanged::class, [DefaultCurrencyChangedListener::class, 'handle']);
     }

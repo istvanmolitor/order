@@ -1,10 +1,11 @@
 <?php
+
 namespace Molitor\Order\Filament\Resources\OrderResource\Pages;
 
 use Filament\Resources\Pages\EditRecord;
-use Molitor\Order\Filament\Resources\OrderResource;
-use Molitor\Address\Repositories\AddressRepositoryInterface;
 use Molitor\Address\Models\Address;
+use Molitor\Address\Repositories\AddressRepositoryInterface;
+use Molitor\Order\Filament\Resources\OrderResource;
 use Molitor\Order\Models\OrderShipping;
 use Molitor\Order\Services\ShippingHandler;
 
@@ -45,6 +46,7 @@ class EditOrder extends EditRecord
                 $data = $type->fill($data, $record->shipping_data);
             }
         }
+
         return $data;
     }
 
@@ -55,14 +57,14 @@ class EditOrder extends EditRecord
         $record = $this->getRecord();
 
         // Invoice address (required FK)
-        $invoice = $record->invoiceAddress ?: new Address();
+        $invoice = $record->invoiceAddress ?: new Address;
         if (isset($data['invoice_address']) && is_array($data['invoice_address'])) {
             $addressRepository->saveAddress($invoice, $data['invoice_address']);
             $data['invoice_address_id'] = $invoice->id;
             unset($data['invoice_address']);
         }
 
-        $shipping = $record->shippingAddress ?: new Address();
+        $shipping = $record->shippingAddress ?: new Address;
         if (isset($data['shipping_address']) && is_array($data['shipping_address'])) {
             $addressRepository->saveAddress($shipping, $data['shipping_address']);
             $data['shipping_address_id'] = $shipping->id;

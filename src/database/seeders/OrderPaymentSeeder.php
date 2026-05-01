@@ -41,7 +41,7 @@ class OrderPaymentSeeder extends Seeder
             $payment->setAttributeTranslation('name', $data['hu'], 'hu');
             $payment->setAttributeTranslation('name', $data['en'], 'en');
             $payment->setAttributeTranslation('name', $data['de'], 'de');
-            if (!empty($data['description'])) {
+            if (! empty($data['description'])) {
                 $payment->setAttributeTranslation('description', $data['description'], 'hu');
             }
             $payment->save();

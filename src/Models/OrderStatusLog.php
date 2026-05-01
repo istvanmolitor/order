@@ -11,5 +11,5 @@ class OrderStatusLog extends Model
         'order_status_id',
     ];
 
-    CONST UPDATED_AT = null;
+    const UPDATED_AT = null;
 }

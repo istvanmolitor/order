@@ -2,11 +2,12 @@
 
 namespace Molitor\Order\Repositories;
 
+use Illuminate\Support\Collection;
 use Molitor\Order\Models\OrderPayment;
 
 interface OrderPaymentRepositoryInterface
 {
-    public function getByCode(string $code): OrderPayment|null;
+    public function getByCode(string $code): ?OrderPayment;
 
     public function getByName(string $name): ?OrderPayment;
 
@@ -15,7 +16,6 @@ interface OrderPaymentRepositoryInterface
     /**
      * Get payment options filtered by shipping method.
      *
-     * @param int $orderShippingId
      * @return array<int,string>
      */
     public function getOptionsByShippingId(int $orderShippingId): array;
@@ -29,10 +29,9 @@ interface OrderPaymentRepositoryInterface
     /**
      * Get payment methods allowed for the given shipping method.
      *
-     * @param int $orderShippingId
-     * @return \Illuminate\Support\Collection|OrderPayment[]
+     * @return Collection|OrderPayment[]
      */
     public function getByShippingId(int $orderShippingId);
 
-    public function getById(int $paymentId): OrderPayment|null;
+    public function getById(int $paymentId): ?OrderPayment;
 }

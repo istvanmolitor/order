@@ -10,7 +10,7 @@ class OrderStatusRepository implements OrderStatusRepositoryInterface
 
     public function __construct()
     {
-        $this->orderStatus = new OrderStatus();
+        $this->orderStatus = new OrderStatus;
     }
 
     public function getByName(string $name, int|string|null $language = null): ?OrderStatus
@@ -25,8 +25,9 @@ class OrderStatusRepository implements OrderStatusRepositoryInterface
             ->mapWithKeys(function (OrderStatus $status) {
                 $label = $status->name ?? null;
                 if ($label === null || $label === '') {
-                    $label = $status->code ?: ('#' . (string) $status->id);
+                    $label = $status->code ?: ('#'.(string) $status->id);
                 }
+
                 return [$status->id => (string) $label];
             })
             ->toArray();
@@ -47,7 +48,7 @@ class OrderStatusRepository implements OrderStatusRepositoryInterface
         return $this->fundOrCreate('ordered', 'Megrendelve');
     }
 
-    public function getByCode(string $code): OrderStatus|null
+    public function getByCode(string $code): ?OrderStatus
     {
         return $this->orderStatus->where('code', $code)->first();
     }

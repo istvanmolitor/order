@@ -2,9 +2,9 @@
 
 namespace Molitor\Order\Models;
 
-use Molitor\Language\Models\TranslatableModel;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Molitor\Currency\Services\Price;
+use Molitor\Language\Models\TranslatableModel;
 
 class OrderPayment extends TranslatableModel
 {
@@ -35,7 +35,7 @@ class OrderPayment extends TranslatableModel
 
     public function getPrice(): Price
     {
-        return new Price((float)$this->price, null);
+        return new Price((float) $this->price, null);
     }
 
     public function shippings(): BelongsToMany

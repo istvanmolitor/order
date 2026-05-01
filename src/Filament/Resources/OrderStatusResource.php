@@ -2,21 +2,21 @@
 
 namespace Molitor\Order\Filament\Resources;
 
-use Filament\Resources\Resource;
-use Filament\Tables\Columns\TextColumn;
-use Filament\Tables\Columns\ColorColumn;
-use Filament\Forms;
-use Filament\Tables\Table;
-use Filament\Actions\DeleteAction;
-use Filament\Actions\EditAction;
 use Filament\Actions\BulkActionGroup;
+use Filament\Actions\DeleteAction;
 use Filament\Actions\DeleteBulkAction;
+use Filament\Actions\EditAction;
+use Filament\Forms;
+use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
+use Filament\Tables\Columns\ColorColumn;
+use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Table;
 use Illuminate\Support\Facades\Gate;
 use Molitor\Language\Filament\Components\TranslatableFields;
+use Molitor\Language\Repositories\LanguageRepositoryInterface;
 use Molitor\Order\Filament\Resources\OrderStatusResource\Pages;
 use Molitor\Order\Models\OrderStatus;
-use Molitor\Language\Repositories\LanguageRepositoryInterface;
 
 class OrderStatusResource extends Resource
 {

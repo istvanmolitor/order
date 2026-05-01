@@ -12,7 +12,7 @@ class OrderItemRepository implements OrderItemRepositoryInterface
 
     public function __construct()
     {
-        $this->orderItem = new OrderItem();
+        $this->orderItem = new OrderItem;
     }
 
     public function delete(OrderItem $orderItem): void
@@ -31,7 +31,7 @@ class OrderItemRepository implements OrderItemRepositoryInterface
             if ($order->orderItems->has($index)) {
                 $orderItem = $order->orderItems->get($index);
             } else {
-                $orderItem = new OrderItem();
+                $orderItem = new OrderItem;
                 $orderItem->order_id = $order->id;
             }
 
@@ -46,7 +46,7 @@ class OrderItemRepository implements OrderItemRepositoryInterface
          * @var OrderItem $orderItem
          */
         foreach ($order->orderItems as $index => $orderItem) {
-            if(!isset($request->orderItems[$index])) {
+            if (! isset($request->orderItems[$index])) {
                 $orderItem->delete();
             }
         }

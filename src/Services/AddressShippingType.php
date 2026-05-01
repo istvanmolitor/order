@@ -2,13 +2,11 @@
 
 namespace Molitor\Order\Services;
 
-use Illuminate\Support\Facades\Validator;
 use Molitor\Address\Filament\Components\Address;
 use Molitor\Address\Repositories\CountryRepositoryInterface;
 
 class AddressShippingType extends ShippingType
 {
-
     public function getName(): string
     {
         return 'address';
@@ -22,7 +20,7 @@ class AddressShippingType extends ShippingType
     public function getForm(): array
     {
         return [
-            Address::make('address', __('order::common.address'))
+            Address::make('address', __('order::common.address')),
         ];
     }
 
@@ -62,6 +60,7 @@ class AddressShippingType extends ShippingType
     {
         /** @var CountryRepositoryInterface $countryRepository */
         $countryRepository = app(CountryRepositoryInterface::class);
+
         return [
             'countries' => $countryRepository->getOptions(),
             'defaultCountryId' => $countryRepository->getDefaultId(),

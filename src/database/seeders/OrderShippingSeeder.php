@@ -3,8 +3,8 @@
 namespace Molitor\Order\database\seeders;
 
 use Illuminate\Database\Seeder;
-use Molitor\Order\Models\OrderShipping;
 use Molitor\Order\Models\OrderPayment;
+use Molitor\Order\Models\OrderShipping;
 
 class OrderShippingSeeder extends Seeder
 {

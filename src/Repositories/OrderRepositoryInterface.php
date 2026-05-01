@@ -3,9 +3,9 @@
 namespace Molitor\Order\Repositories;
 
 use Illuminate\Database\Eloquent\Collection;
-use Molitor\Order\Models\Order;
-use Molitor\Customer\Models\Customer;
 use Molitor\Currency\Models\Currency;
+use Molitor\Customer\Models\Customer;
+use Molitor\Order\Models\Order;
 use Molitor\Order\Models\OrderStatus;
 
 interface OrderRepositoryInterface

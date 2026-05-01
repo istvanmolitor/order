@@ -3,11 +3,9 @@
 namespace Molitor\Order\Services;
 
 use Filament\Forms\Components\Textarea;
-use Illuminate\Support\Facades\Validator;
 
 class SimpleShippingType extends ShippingType
 {
-
     public function getName(): string
     {
         return 'simple';

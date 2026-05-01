@@ -3,7 +3,6 @@
 namespace Molitor\Order\database\seeders;
 
 use Illuminate\Database\Seeder;
-use Molitor\Order\Models\OrderStatus;
 use Molitor\User\Exceptions\PermissionException;
 use Molitor\User\Services\AclManagementService;
 

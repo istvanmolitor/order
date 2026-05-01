@@ -2,24 +2,23 @@
 
 namespace Molitor\Order\Filament\Resources;
 
+use Filament\Actions\BulkActionGroup;
+use Filament\Actions\DeleteAction;
+use Filament\Actions\DeleteBulkAction;
+use Filament\Actions\EditAction;
+use Filament\Forms;
 use Filament\Forms\Components\ColorPicker;
-use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Resources\Resource;
-use Filament\Tables\Columns\TextColumn;
-use Filament\Tables\Columns\ColorColumn;
-use Filament\Forms;
-use Filament\Tables\Table;
-use Filament\Actions\DeleteAction;
-use Filament\Actions\EditAction;
-use Filament\Actions\BulkActionGroup;
-use Filament\Actions\DeleteBulkAction;
 use Filament\Schemas\Schema;
+use Filament\Tables\Columns\ColorColumn;
+use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Table;
 use Illuminate\Support\Facades\Gate;
+use Molitor\Currency\Repositories\CurrencyRepositoryInterface;
 use Molitor\Language\Filament\Components\TranslatableFields;
 use Molitor\Order\Filament\Resources\OrderPaymentResource\Pages;
 use Molitor\Order\Models\OrderPayment;
-use Molitor\Currency\Repositories\CurrencyRepositoryInterface;
 
 class OrderPaymentResource extends Resource
 {
@@ -46,6 +45,7 @@ class OrderPaymentResource extends Resource
     {
         /** @var CurrencyRepositoryInterface $currencyRepository */
         $currencyRepository = app(CurrencyRepositoryInterface::class);
+
         return $schema->components([
             TextInput::make('code')
                 ->label(__('order::order_payment.form.code'))

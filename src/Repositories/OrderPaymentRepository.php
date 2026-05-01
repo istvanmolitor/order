@@ -10,7 +10,7 @@ class OrderPaymentRepository implements OrderPaymentRepositoryInterface
 
     public function __construct()
     {
-        $this->orderPayment = new OrderPayment();
+        $this->orderPayment = new OrderPayment;
     }
 
     public function getByName(string $name): ?OrderPayment
@@ -25,8 +25,9 @@ class OrderPaymentRepository implements OrderPaymentRepositoryInterface
             ->mapWithKeys(function (OrderPayment $payment) {
                 $label = $payment->name ?? null;
                 if ($label === null || $label === '') {
-                    $label = $payment->code ?: ('#' . (string) $payment->id);
+                    $label = $payment->code ?: ('#'.(string) $payment->id);
                 }
+
                 return [$payment->id => (string) $label];
             })
             ->toArray();
@@ -38,8 +39,9 @@ class OrderPaymentRepository implements OrderPaymentRepositoryInterface
             ->mapWithKeys(function (OrderPayment $payment) {
                 $label = $payment->name ?? null;
                 if ($label === null || $label === '') {
-                    $label = $payment->code ?: ('#' . (string) $payment->id);
+                    $label = $payment->code ?: ('#'.(string) $payment->id);
                 }
+
                 return [$payment->id => (string) $label];
             })
             ->toArray();
@@ -60,7 +62,7 @@ class OrderPaymentRepository implements OrderPaymentRepositoryInterface
         return $this->orderPayment->joinTranslation()->orderByTranslation('name')->selectBase()->get();
     }
 
-    public function getByCode(string $code): OrderPayment|null
+    public function getByCode(string $code): ?OrderPayment
     {
         return $this->orderPayment->where('code', $code)->first();
     }
@@ -77,7 +79,7 @@ class OrderPaymentRepository implements OrderPaymentRepositoryInterface
             ->get();
     }
 
-    public function getById(int $paymentId): OrderPayment|null
+    public function getById(int $paymentId): ?OrderPayment
     {
         return $this->orderPayment->where('id', $paymentId)->first();
     }

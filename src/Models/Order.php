@@ -5,8 +5,8 @@ namespace Molitor\Order\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
-use Molitor\Address\Repositories\AddressRepositoryInterface;
 use Molitor\Address\Models\Address;
+use Molitor\Address\Repositories\AddressRepositoryInterface;
 use Molitor\Customer\Models\Customer;
 use Molitor\Order\Repositories\OrderRepositoryInterface;
 

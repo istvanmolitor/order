@@ -6,7 +6,7 @@ use Molitor\Order\Models\OrderStatus;
 
 interface OrderStatusRepositoryInterface
 {
-    public function getByCode(string $code): OrderStatus|null;
+    public function getByCode(string $code): ?OrderStatus;
 
     public function getByName(string $name): ?OrderStatus;
 

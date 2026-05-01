@@ -29,6 +29,7 @@ abstract class ShippingType
         } else {
             $formData = $shippingData;
         }
+
         return $formData;
     }
 
@@ -41,7 +42,7 @@ abstract class ShippingType
         return [];
     }
 
-    public function getAction(): string|null
+    public function getAction(): ?string
     {
         return null;
     }
@@ -49,7 +50,7 @@ abstract class ShippingType
     /**
      * Render the view for displaying shipping data (e.g., on finalize page)
      *
-     * @param array $shippingData The shipping data to display
+     * @param  array  $shippingData  The shipping data to display
      * @return string The rendered HTML
      */
     abstract public function renderView(array $shippingData): string;

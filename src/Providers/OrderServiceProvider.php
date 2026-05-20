@@ -2,6 +2,7 @@
 
 namespace Molitor\Order\Providers;
 
+use Illuminate\Routing\Router;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\ServiceProvider;
 use Molitor\Currency\Events\DefaultCurrencyChanged;
@@ -26,6 +27,10 @@ class OrderServiceProvider extends ServiceProvider
         $this->loadMigrationsFrom(__DIR__.'/../database/migrations');
         $this->loadTranslationsFrom(__DIR__.'/../../resources/lang', 'order');
         $this->loadViewsFrom(__DIR__.'/../../resources/views', 'order');
+
+        // Load API routes with /api prefix
+        $this->app->make(Router::class)
+            ->group(['prefix' => 'api'], __DIR__.'/../routes/api.php');
 
         Event::listen(DefaultCurrencyChanged::class, [DefaultCurrencyChangedListener::class, 'handle']);
     }

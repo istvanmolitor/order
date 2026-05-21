@@ -12,6 +12,7 @@ use OpenApi\Attributes as OA;
     description: 'Order status information',
     properties: [
         new OA\Property(property: 'id', type: 'integer', example: 1),
+        new OA\Property(property: 'code', type: 'string', example: 'pending'),
         new OA\Property(property: 'name', type: 'string', example: 'Pending'),
         new OA\Property(property: 'color', type: 'string', example: '#CCCCCC'),
     ]
@@ -27,6 +28,7 @@ class OrderStatusResource extends JsonResource
     {
         return [
             'id' => $this->id,
+            'code' => $this->code,
             'name' => $this->name,
             'color' => $this->color,
         ];

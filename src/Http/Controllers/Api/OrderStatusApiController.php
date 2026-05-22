@@ -71,4 +71,3 @@ class OrderStatusApiController extends Controller
         return response()->json(null, 204);
     }
 }
-

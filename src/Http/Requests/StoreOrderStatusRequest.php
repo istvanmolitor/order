@@ -25,4 +25,3 @@ class StoreOrderStatusRequest extends FormRequest
         ];
     }
 }
-

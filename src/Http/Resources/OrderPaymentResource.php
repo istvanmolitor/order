@@ -35,4 +35,3 @@ class OrderPaymentResource extends JsonResource
         ];
     }
 }
-

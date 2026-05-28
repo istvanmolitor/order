@@ -12,7 +12,7 @@ interface OrderRepositoryInterface
 {
     public function delete(Order $order): void;
 
-    public function create(string $code, Customer $customer, Currency $currency, OrderStatus $orderStatus): Order;
+    public function create(string $code, Customer $customer, Currency $currency, OrderStatus $orderStatus, int $orderPaymentId, int $orderShippingId): Order;
 
     public function getByCode(string $code): ?Order;
 

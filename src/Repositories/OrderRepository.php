@@ -25,7 +25,7 @@ class OrderRepository implements OrderRepositoryInterface
         $order->delete();
     }
 
-    public function create(string $code, Customer $customer, Currency $currency, OrderStatus $orderStatus): Order
+    public function create(string $code, Customer $customer, Currency $currency, OrderStatus $orderStatus, int $orderPaymentId, int $orderShippingId): Order
     {
         return $this->order->create([
             'is_closed' => true,
@@ -33,6 +33,8 @@ class OrderRepository implements OrderRepositoryInterface
             'customer_id' => $customer->id,
             'order_status_id' => $orderStatus->id,
             'currency_id' => $currency->id,
+            'order_payment_id' => $orderPaymentId,
+            'order_shipping_id' => $orderShippingId,
             'invoice_address_id' => $this->addressRepository->createEmptyId(),
             'shipping_address_id' => $this->addressRepository->createEmptyId(),
         ]);

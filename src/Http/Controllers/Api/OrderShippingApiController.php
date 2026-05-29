@@ -61,20 +61,32 @@ class OrderShippingApiController extends Controller
 
         $orderShipping = $this->orderShippingRepository->create(
             $validated['code'],
-            $validated['name'],
             $validated['type'] ?? null,
             $validated['color'] ?? null,
             isset($validated['price']) ? (float) $validated['price'] : null,
         );
 
-        return response()->json(new OrderShippingResource($orderShipping), 201);
+        $orderShipping->setRequestTranslations($validated);
+        $orderShipping->save();
+
+        return response()->json(new OrderShippingResource($orderShipping->load('translations')), 201);
     }
 
     public function update(StoreOrderShippingRequest $request, OrderShipping $orderShipping): JsonResponse
     {
-        $orderShipping->update($request->validated());
+        $validated = $request->validated();
 
-        return response()->json(new OrderShippingResource($orderShipping));
+        $orderShipping->update([
+            'code' => $validated['code'],
+            'type' => $validated['type'] ?? null,
+            'color' => $validated['color'] ?? null,
+            'price' => isset($validated['price']) ? (float) $validated['price'] : null,
+        ]);
+
+        $orderShipping->setRequestTranslations($validated);
+        $orderShipping->save();
+
+        return response()->json(new OrderShippingResource($orderShipping->load('translations')));
     }
 
     public function destroy(OrderShipping $orderShipping): JsonResponse

@@ -4,6 +4,7 @@ namespace Molitor\Order\Http\Resources;
 
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
+use Molitor\Language\Http\Resources\TranslationsResource;
 use OpenApi\Attributes as OA;
 
 #[OA\Schema(
@@ -14,6 +15,7 @@ use OpenApi\Attributes as OA;
         new OA\Property(property: 'id', type: 'integer', example: 1),
         new OA\Property(property: 'code', type: 'string', example: 'standard'),
         new OA\Property(property: 'name', type: 'string', example: 'Standard delivery'),
+        new OA\Property(property: 'description', type: 'string', nullable: true, example: 'Delivered by courier'),
         new OA\Property(property: 'type', type: 'string', nullable: true, example: 'simple'),
         new OA\Property(property: 'color', type: 'string', nullable: true, example: '#f59e0b'),
         new OA\Property(property: 'price', type: 'number', format: 'float', nullable: true, example: 1490),
@@ -29,11 +31,13 @@ class OrderShippingResource extends JsonResource
             'id' => $this->id,
             'code' => $this->code,
             'name' => $this->name,
+            'description' => $this->description,
             'type' => $this->type,
             'color' => $this->color,
             'price' => $this->price,
             'created_at' => $this->created_at?->toDateTimeString(),
             'updated_at' => $this->updated_at?->toDateTimeString(),
+            'translations' => new TranslationsResource($this->getTranslations()),
         ];
     }
 }

@@ -20,5 +20,5 @@ interface OrderShippingRepositoryInterface
 
     public function getById(int $shippingId): ?OrderShipping;
 
-    public function create(string $code, string $name, ?string $type, ?string $color, ?float $price): OrderShipping;
+    public function create(string $code, ?string $type, ?string $color, ?float $price): OrderShipping;
 }

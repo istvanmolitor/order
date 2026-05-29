@@ -20,7 +20,9 @@ class StoreOrderShippingRequest extends FormRequest
 
         return [
             'code' => ['required', 'string', 'max:50', Rule::unique('order_shippings', 'code')->ignore($ignoreId)],
-            'name' => ['required', 'string', 'max:255'],
+            'translations' => ['required', 'array'],
+            'translations.*.name' => ['required', 'string', 'max:255'],
+            'translations.*.description' => ['nullable', 'string'],
             'type' => ['nullable', 'string', 'max:50'],
             'color' => ['nullable', 'string', 'max:50'],
             'price' => ['nullable', 'numeric', 'min:0'],

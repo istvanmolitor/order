@@ -61,19 +61,30 @@ class OrderPaymentApiController extends Controller
 
         $orderPayment = $this->orderPaymentRepository->create(
             $validated['code'],
-            $validated['name'],
             $validated['color'] ?? null,
             isset($validated['price']) ? (float) $validated['price'] : null,
         );
 
-        return response()->json(new OrderPaymentResource($orderPayment), 201);
+        $orderPayment->setRequestTranslations($validated);
+        $orderPayment->save();
+
+        return response()->json(new OrderPaymentResource($orderPayment->load('translations')), 201);
     }
 
     public function update(StoreOrderPaymentRequest $request, OrderPayment $orderPayment): JsonResponse
     {
-        $orderPayment->update($request->validated());
+        $validated = $request->validated();
 
-        return response()->json(new OrderPaymentResource($orderPayment));
+        $orderPayment->update([
+            'code' => $validated['code'],
+            'color' => $validated['color'] ?? null,
+            'price' => isset($validated['price']) ? (float) $validated['price'] : null,
+        ]);
+
+        $orderPayment->setRequestTranslations($validated);
+        $orderPayment->save();
+
+        return response()->json(new OrderPaymentResource($orderPayment->load('translations')));
     }
 
     public function destroy(OrderPayment $orderPayment): JsonResponse

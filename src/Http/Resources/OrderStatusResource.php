@@ -4,6 +4,7 @@ namespace Molitor\Order\Http\Resources;
 
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
+use Molitor\Language\Http\Resources\TranslationsResource;
 use OpenApi\Attributes as OA;
 
 #[OA\Schema(
@@ -14,6 +15,7 @@ use OpenApi\Attributes as OA;
         new OA\Property(property: 'id', type: 'integer', example: 1),
         new OA\Property(property: 'code', type: 'string', example: 'pending'),
         new OA\Property(property: 'name', type: 'string', example: 'Pending'),
+        new OA\Property(property: 'description', type: 'string', nullable: true, example: 'Order is awaiting processing'),
         new OA\Property(property: 'color', type: 'string', example: '#CCCCCC'),
     ]
 )]
@@ -30,7 +32,9 @@ class OrderStatusResource extends JsonResource
             'id' => $this->id,
             'code' => $this->code,
             'name' => $this->name,
+            'description' => $this->description,
             'color' => $this->color,
+            'translations' => new TranslationsResource($this->getTranslations()),
         ];
     }
 }

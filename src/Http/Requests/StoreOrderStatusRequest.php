@@ -20,7 +20,9 @@ class StoreOrderStatusRequest extends FormRequest
 
         return [
             'code' => ['required', 'string', 'max:50', Rule::unique('order_statuses', 'code')->ignore($ignoreId)],
-            'name' => ['required', 'string', 'max:255'],
+            'translations' => ['required', 'array'],
+            'translations.*.name' => ['required', 'string', 'max:255'],
+            'translations.*.description' => ['nullable', 'string'],
             'color' => ['nullable', 'string', 'max:50'],
         ];
     }

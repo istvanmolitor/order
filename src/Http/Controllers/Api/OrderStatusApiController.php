@@ -52,16 +52,50 @@ class OrderStatusApiController extends Controller
 
     public function store(StoreOrderStatusRequest $request): JsonResponse
     {
-        $orderStatus = OrderStatus::create($request->validated());
+        $validated = $request->validated();
 
-        return response()->json(new OrderStatusResource($orderStatus), 201);
+        $orderStatus = OrderStatus::create([
+            'code' => $validated['code'],
+            'color' => $validated['color'] ?? null,
+        ]);
+
+        if (isset($validated['translations'])) {
+            foreach ($validated['translations'] as $languageId => $translation) {
+                $orderStatus->translations()->updateOrCreate(
+                    ['language_id' => (int) $languageId],
+                    [
+                        'name' => $translation['name'] ?? '',
+                        'description' => $translation['description'] ?? null,
+                    ]
+                );
+            }
+        }
+
+        return response()->json(new OrderStatusResource($orderStatus->load('translations')), 201);
     }
 
     public function update(StoreOrderStatusRequest $request, OrderStatus $orderStatus): JsonResponse
     {
-        $orderStatus->update($request->validated());
+        $validated = $request->validated();
 
-        return response()->json(new OrderStatusResource($orderStatus));
+        $orderStatus->update([
+            'code' => $validated['code'],
+            'color' => $validated['color'] ?? null,
+        ]);
+
+        if (isset($validated['translations'])) {
+            foreach ($validated['translations'] as $languageId => $translation) {
+                $orderStatus->translations()->updateOrCreate(
+                    ['language_id' => (int) $languageId],
+                    [
+                        'name' => $translation['name'] ?? '',
+                        'description' => $translation['description'] ?? null,
+                    ]
+                );
+            }
+        }
+
+        return response()->json(new OrderStatusResource($orderStatus->load('translations')));
     }
 
     public function destroy(OrderStatus $orderStatus): JsonResponse

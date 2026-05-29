@@ -23,5 +23,5 @@ interface OrderStatusRepositoryInterface
     /**
      * @param array<string, mixed> $validated
      */
-    public function create(string $code, ?string $color, array $validated): OrderStatus;
+    public function create(string $code, ?string $color): OrderStatus;
 }

@@ -51,19 +51,12 @@ class OrderStatusRepository implements OrderStatusRepositoryInterface
     /**
      * @param array<string, mixed> $validated
      */
-    public function create(string $code, ?string $color, array $validated): OrderStatus
+    public function create(string $code, ?string $color): OrderStatus
     {
-        $orderStatus = $this->orderStatus->create([
+        return $this->orderStatus->create([
             'code' => $code,
             'color' => $color,
         ]);
-
-        if (isset($validated['translations'])) {
-            $orderStatus->setRequestTranslations($validated);
-            $orderStatus->save();
-        }
-
-        return $orderStatus;
     }
 
     public function getByCode(string $code): ?OrderStatus

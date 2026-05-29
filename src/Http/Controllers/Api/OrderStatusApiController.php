@@ -62,8 +62,10 @@ class OrderStatusApiController extends Controller
         $orderStatus = $this->orderStatusRepository->create(
             $validated['code'],
             $validated['color'] ?? null,
-            $validated,
         );
+
+        $orderStatus->setRequestTranslations($validated);
+        $orderStatus->save();
 
         return response()->json(new OrderStatusResource($orderStatus->load('translations')), 201);
     }

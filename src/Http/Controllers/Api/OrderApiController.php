@@ -5,7 +5,6 @@ namespace Molitor\Order\Http\Controllers\Api;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
-use Molitor\Admin\Traits\HasAdminFilters;
 use Molitor\Order\Http\Resources\OrderResource;
 use Molitor\Order\Http\Resources\OrderStatusResource;
 use Molitor\Order\Models\Order;
@@ -15,8 +14,6 @@ use OpenApi\Attributes as OA;
 
 class OrderApiController extends Controller
 {
-    use HasAdminFilters;
-
     public function __construct(
         private OrderRepositoryInterface $orderRepository
     ) {}
@@ -53,8 +50,30 @@ class OrderApiController extends Controller
     )]
     public function index(Request $request): JsonResponse
     {
-        $query = Order::with(['customer', 'orderStatus', 'orderItems']);
-        $orders = $this->applyAdminFilters($query, $request, ['code', 'customer.name'])
+        $query = Order::query()->with(['customer', 'orderStatus', 'orderItems']);
+
+        if ($request->filled('search')) {
+            $search = (string) $request->input('search');
+
+            $query->where(function ($builder) use ($search): void {
+                $builder
+                    ->where('code', 'like', "%{$search}%")
+                    ->orWhereHas('customer', function ($customerQuery) use ($search): void {
+                        $customerQuery->where('name', 'like', "%{$search}%");
+                    });
+            });
+        }
+
+        $allowedSorts = ['id', 'code', 'created_at'];
+        $sort = (string) $request->input('sort', 'code');
+        if (! in_array($sort, $allowedSorts, true)) {
+            $sort = 'code';
+        }
+
+        $direction = strtolower((string) $request->input('direction', 'desc')) === 'asc' ? 'asc' : 'desc';
+
+        $orders = $query
+            ->orderBy($sort, $direction)
             ->paginate(10)
             ->withQueryString();
 

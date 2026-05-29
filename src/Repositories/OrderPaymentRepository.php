@@ -83,4 +83,14 @@ class OrderPaymentRepository implements OrderPaymentRepositoryInterface
     {
         return $this->orderPayment->where('id', $paymentId)->first();
     }
+
+    public function create(string $code, string $name, ?string $color, ?float $price): OrderPayment
+    {
+        return $this->orderPayment->create([
+            'code' => $code,
+            'name' => $name,
+            'color' => $color,
+            'price' => $price,
+        ]);
+    }
 }

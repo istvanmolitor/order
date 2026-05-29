@@ -34,4 +34,6 @@ interface OrderPaymentRepositoryInterface
     public function getByShippingId(int $orderShippingId);
 
     public function getById(int $paymentId): ?OrderPayment;
+
+    public function create(string $code, string $name, ?string $color, ?float $price): OrderPayment;
 }

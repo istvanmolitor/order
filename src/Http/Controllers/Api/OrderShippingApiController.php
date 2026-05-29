@@ -9,10 +9,15 @@ use Molitor\Admin\Traits\HasAdminFilters;
 use Molitor\Order\Http\Requests\StoreOrderShippingRequest;
 use Molitor\Order\Http\Resources\OrderShippingResource;
 use Molitor\Order\Models\OrderShipping;
+use Molitor\Order\Repositories\OrderShippingRepositoryInterface;
 
 class OrderShippingApiController extends Controller
 {
     use HasAdminFilters;
+
+    public function __construct(
+        private OrderShippingRepositoryInterface $orderShippingRepository
+    ) {}
 
     public function index(Request $request): JsonResponse
     {
@@ -52,7 +57,15 @@ class OrderShippingApiController extends Controller
 
     public function store(StoreOrderShippingRequest $request): JsonResponse
     {
-        $orderShipping = OrderShipping::create($request->validated());
+        $validated = $request->validated();
+
+        $orderShipping = $this->orderShippingRepository->create(
+            $validated['code'],
+            $validated['name'],
+            $validated['type'] ?? null,
+            $validated['color'] ?? null,
+            isset($validated['price']) ? (float) $validated['price'] : null,
+        );
 
         return response()->json(new OrderShippingResource($orderShipping), 201);
     }

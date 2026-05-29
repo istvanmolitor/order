@@ -19,4 +19,9 @@ interface OrderStatusRepositoryInterface
     public function getAll();
 
     public function getDefault(): ?OrderStatus;
+
+    /**
+     * @param array<string, mixed> $validated
+     */
+    public function create(string $code, ?string $color, array $validated): OrderStatus;
 }

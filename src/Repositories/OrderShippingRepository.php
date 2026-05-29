@@ -57,4 +57,15 @@ class OrderShippingRepository implements OrderShippingRepositoryInterface
     {
         return $this->orderShipping->where('id', $shippingId)->first();
     }
+
+    public function create(string $code, string $name, ?string $type, ?string $color, ?float $price): OrderShipping
+    {
+        return $this->orderShipping->create([
+            'code' => $code,
+            'name' => $name,
+            'type' => $type,
+            'color' => $color,
+            'price' => $price,
+        ]);
+    }
 }

@@ -9,10 +9,15 @@ use Molitor\Admin\Traits\HasAdminFilters;
 use Molitor\Order\Http\Requests\StoreOrderStatusRequest;
 use Molitor\Order\Http\Resources\OrderStatusResource;
 use Molitor\Order\Models\OrderStatus;
+use Molitor\Order\Repositories\OrderStatusRepositoryInterface;
 
 class OrderStatusApiController extends Controller
 {
     use HasAdminFilters;
+
+    public function __construct(
+        private OrderStatusRepositoryInterface $orderStatusRepository
+    ) {}
 
     public function index(Request $request): JsonResponse
     {
@@ -54,22 +59,11 @@ class OrderStatusApiController extends Controller
     {
         $validated = $request->validated();
 
-        $orderStatus = OrderStatus::create([
-            'code' => $validated['code'],
-            'color' => $validated['color'] ?? null,
-        ]);
-
-        if (isset($validated['translations'])) {
-            foreach ($validated['translations'] as $languageId => $translation) {
-                $orderStatus->translations()->updateOrCreate(
-                    ['language_id' => (int) $languageId],
-                    [
-                        'name' => $translation['name'] ?? '',
-                        'description' => $translation['description'] ?? null,
-                    ]
-                );
-            }
-        }
+        $orderStatus = $this->orderStatusRepository->create(
+            $validated['code'],
+            $validated['color'] ?? null,
+            $validated,
+        );
 
         return response()->json(new OrderStatusResource($orderStatus->load('translations')), 201);
     }

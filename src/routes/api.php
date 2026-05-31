@@ -7,14 +7,14 @@ use Molitor\Order\Http\Controllers\Api\OrderShippingApiController;
 use Molitor\Order\Http\Controllers\Api\OrderStatusApiController;
 
 Route::prefix('admin/order')
-    ->middleware(['api', 'auth:sanctum'])
+    ->middleware(['api', 'auth:sanctum', 'permission:order'])
     ->name('order.')
     ->group(function () {
         Route::resource('orders', OrderApiController::class);
     });
 
 Route::prefix('admin/order/order-statuses')
-    ->middleware(['api', 'auth:sanctum'])
+    ->middleware(['api', 'auth:sanctum', 'permission:order'])
     ->name('order-status.')
     ->group(function () {
         Route::get('/', [OrderStatusApiController::class, 'index']);
@@ -27,7 +27,7 @@ Route::prefix('admin/order/order-statuses')
     });
 
 Route::prefix('admin/order/order-payments')
-    ->middleware(['api', 'auth:sanctum'])
+    ->middleware(['api', 'auth:sanctum', 'permission:order'])
     ->name('order-payment.')
     ->group(function () {
         Route::get('/', [OrderPaymentApiController::class, 'index']);
@@ -40,7 +40,7 @@ Route::prefix('admin/order/order-payments')
     });
 
 Route::prefix('admin/order/order-shippings')
-    ->middleware(['api', 'auth:sanctum'])
+    ->middleware(['api', 'auth:sanctum', 'permission:order'])
     ->name('order-shipping.')
     ->group(function () {
         Route::get('/', [OrderShippingApiController::class, 'index']);

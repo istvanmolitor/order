@@ -3,6 +3,7 @@
 namespace Molitor\Order\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Validation\Rule;
 use Molitor\Order\Models\OrderStatus;
 
@@ -10,7 +11,7 @@ class StoreOrderStatusRequest extends FormRequest
 {
     public function authorize(): bool
     {
-        return true;
+        return Gate::allows('acl', 'order');
     }
 
     public function rules(): array

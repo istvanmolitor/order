@@ -125,7 +125,7 @@ class OrderApiController extends Controller
     )]
     public function show(Order $order): JsonResponse
     {
-        $order->load(['customer', 'orderStatus', 'orderItems', 'invoiceAddress', 'shippingAddress']);
+        $order->load(['customer', 'orderStatus', 'orderItems.product.productImage', 'invoiceAddress', 'shippingAddress']);
 
         return response()->json(new OrderResource($order));
     }
@@ -149,7 +149,7 @@ class OrderApiController extends Controller
     )]
     public function edit(Order $order): JsonResponse
     {
-        $order->load(['customer', 'orderStatus', 'orderItems', 'invoiceAddress', 'shippingAddress']);
+        $order->load(['customer', 'orderStatus', 'orderItems.product.productImage', 'invoiceAddress', 'shippingAddress']);
         $orderStatuses = OrderStatus::query()->get();
 
         return response()->json([

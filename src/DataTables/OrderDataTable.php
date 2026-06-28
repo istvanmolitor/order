@@ -23,9 +23,9 @@ class OrderDataTable extends DataTable
 
     protected function initColumns(): void
     {
-        $this->addColumn('id')->setOrderable();
-        $this->addColumn('code')->setSearchable()->setOrderable();
-        $this->addColumn('created_at')->setOrderable();
+        $this->addColumn('id')->setOrderable()->setHidden();
+        $this->addColumn('code')->setLabel('Kód')->setSearchable()->setOrderable();
+        $this->addColumn('created_at')->setLabel('Létrehozva')->setOrderable();
     }
 
     protected function getDefaultSort(): string

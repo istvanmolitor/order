@@ -3,9 +3,9 @@
 namespace Molitor\Order\Http\Controllers\Api;
 
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Request;
+use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Routing\Controller;
-use Molitor\Admin\Traits\HasAdminFilters;
+use Molitor\Order\DataTables\OrderStatusDataTable;
 use Molitor\Order\Http\Requests\StoreOrderStatusRequest;
 use Molitor\Order\Http\Resources\OrderStatusResource;
 use Molitor\Order\Models\OrderStatus;
@@ -13,29 +13,13 @@ use Molitor\Order\Repositories\OrderStatusRepositoryInterface;
 
 class OrderStatusApiController extends Controller
 {
-    use HasAdminFilters;
-
     public function __construct(
         private OrderStatusRepositoryInterface $orderStatusRepository
     ) {}
 
-    public function index(Request $request): JsonResponse
+    public function index(OrderStatusDataTable $dataTable): AnonymousResourceCollection
     {
-        $query = OrderStatus::query()->joinTranslation()->selectBase();
-        $orderStatuses = $this->applyAdminFilters($query, $request, ['code', 'name'])
-            ->paginate(10)
-            ->withQueryString();
-
-        return response()->json([
-            'data' => OrderStatusResource::collection($orderStatuses->items()),
-            'meta' => [
-                'current_page' => $orderStatuses->currentPage(),
-                'last_page' => $orderStatuses->lastPage(),
-                'per_page' => $orderStatuses->perPage(),
-                'total' => $orderStatuses->total(),
-            ],
-            'filters' => $request->only(['search', 'sort', 'direction']),
-        ]);
+        return $dataTable->getResponse();
     }
 
     public function create(): JsonResponse

@@ -4,7 +4,9 @@ namespace Molitor\Order\Http\Controllers\Api;
 
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Routing\Controller;
+use Molitor\Order\DataTables\OrderDataTable;
 use Molitor\Order\Http\Resources\OrderResource;
 use Molitor\Order\Http\Resources\OrderStatusResource;
 use Molitor\Order\Models\Order;
@@ -48,45 +50,9 @@ class OrderApiController extends Controller
             ),
         ]
     )]
-    public function index(Request $request): JsonResponse
+    public function index(OrderDataTable $dataTable): AnonymousResourceCollection
     {
-        $query = Order::query()->with(['customer', 'orderStatus', 'orderItems']);
-
-        if ($request->filled('search')) {
-            $search = (string) $request->input('search');
-
-            $query->where(function ($builder) use ($search): void {
-                $builder
-                    ->where('code', 'like', "%{$search}%")
-                    ->orWhereHas('customer', function ($customerQuery) use ($search): void {
-                        $customerQuery->where('name', 'like', "%{$search}%");
-                    });
-            });
-        }
-
-        $allowedSorts = ['id', 'code', 'created_at'];
-        $sort = (string) $request->input('sort', 'code');
-        if (! in_array($sort, $allowedSorts, true)) {
-            $sort = 'code';
-        }
-
-        $direction = strtolower((string) $request->input('direction', 'desc')) === 'asc' ? 'asc' : 'desc';
-
-        $orders = $query
-            ->orderBy($sort, $direction)
-            ->paginate(10)
-            ->withQueryString();
-
-        return response()->json([
-            'data' => OrderResource::collection($orders->items()),
-            'meta' => [
-                'current_page' => $orders->currentPage(),
-                'last_page' => $orders->lastPage(),
-                'per_page' => $orders->perPage(),
-                'total' => $orders->total(),
-            ],
-            'filters' => $request->only(['search', 'sort', 'direction']),
-        ]);
+        return $dataTable->getResponse();
     }
 
     #[OA\Get(

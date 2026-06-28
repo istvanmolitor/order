@@ -3,9 +3,9 @@
 namespace Molitor\Order\Http\Controllers\Api;
 
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Request;
+use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Routing\Controller;
-use Molitor\Admin\Traits\HasAdminFilters;
+use Molitor\Order\DataTables\OrderPaymentDataTable;
 use Molitor\Order\Http\Requests\StoreOrderPaymentRequest;
 use Molitor\Order\Http\Resources\OrderPaymentResource;
 use Molitor\Order\Models\OrderPayment;
@@ -13,29 +13,13 @@ use Molitor\Order\Repositories\OrderPaymentRepositoryInterface;
 
 class OrderPaymentApiController extends Controller
 {
-    use HasAdminFilters;
-
     public function __construct(
         private OrderPaymentRepositoryInterface $orderPaymentRepository
     ) {}
 
-    public function index(Request $request): JsonResponse
+    public function index(OrderPaymentDataTable $dataTable): AnonymousResourceCollection
     {
-        $query = OrderPayment::query()->joinTranslation()->selectBase();
-        $orderPayments = $this->applyAdminFilters($query, $request, ['code', 'name'])
-            ->paginate(10)
-            ->withQueryString();
-
-        return response()->json([
-            'data' => OrderPaymentResource::collection($orderPayments->items()),
-            'meta' => [
-                'current_page' => $orderPayments->currentPage(),
-                'last_page' => $orderPayments->lastPage(),
-                'per_page' => $orderPayments->perPage(),
-                'total' => $orderPayments->total(),
-            ],
-            'filters' => $request->only(['search', 'sort', 'direction']),
-        ]);
+        return $dataTable->getResponse();
     }
 
     public function create(): JsonResponse

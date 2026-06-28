@@ -38,9 +38,9 @@ class OrderDataTable extends DataTable
         return 'desc';
     }
 
-    protected function getBaseQuery(): Builder
+    public function query(Builder $query): Builder
     {
-        return Order::query()->with(['customer', 'orderStatus', 'orderItems']);
+        return $query->with(['customer', 'orderStatus', 'orderItems']);
     }
 
     protected function applyFilters(Builder $query): Builder

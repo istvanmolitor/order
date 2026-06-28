@@ -27,8 +27,8 @@ class OrderShippingDataTable extends DataTable
         $this->addColumn('name')->setSearchable();
     }
 
-    protected function getBaseQuery(): Builder
+    public function query(Builder $query): Builder
     {
-        return OrderShipping::query()->joinTranslation()->selectBase();
+        return $query->joinTranslation()->selectBase();
     }
 }
